@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  pyvelocity:
+    build:
+      context: .
+      target: production
+    image: futureys/pyvelocity:latest

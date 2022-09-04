@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="pyvelocity"
+version="0.1.0"
+description = "Checks code and settings and ls up advises in point of velocity."
+readme = "README.md"
+requires-python = ">=3.5"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Yukihiko Shinoda"},
+    {email = "yuk.hik.future@gmail.com"},
+]
+maintainers = [
+  {name = "Yukihiko Shinoda", email = "yuk.hik.future@gmail.com"}
+]
+keywords = ["pyvelocity"]
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Typing :: Typed"
+]
+
+[project.urls]
+homepage = "https://example.com/yukihiko-shinoda/pyvelocity"
+# documentation = "https://readthedocs.org"
+repository = "https://github.com/yukihiko-shinoda/pyvelocity"
+# changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+[project.entry-points."console_scripts"]
+pyvelocity = "pyvelocity.cli:main"
+
+[tool.setuptools]
+zip-safe = false
+packages = ["pyvelocity"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+[tool.docformatter]
+recursive = true
+wrap-descriptions = 120
+wrap-summaries = 120
+
+[tool.isort]
+# @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 120
+
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = 120
+
+[tool.pylint.basic]
+docstring-min-length = "7"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.options]
+# Since this rule against single responsibility principle.
+# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+min-public-methods = "1"
+
+[tool.pyvelocity]
+filter = [
+  "line-length"
+]

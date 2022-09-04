@@ -1,0 +1,104 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="pyvelocity"
+version="0.1.0"
+description = "Automates task to check configurations about Python project to follow best practices to increase development velocity."
+readme = "README.md"
+requires-python = ">=3.9"
+# dependencies = [
+#   "click>=7.0",
+#   "tomli"
+# ]
+license = {file = "LICENSE"}
+authors = [
+    {name = "Yukihiko Shinoda"},
+    {email = "yuk.hik.future@gmail.com"},
+]
+maintainers = [
+  {name = "Yukihiko Shinoda", email = "yuk.hik.future@gmail.com"}
+]
+keywords = ["pyvelocity"]
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Bug Tracking",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Topic :: System",
+    "Topic :: System :: Software Distribution",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Typing :: Typed"
+]
+
+[project.urls]
+homepage = "https://github.com/yukihiko-shinoda/pyvelocity"
+# documentation = "https://readthedocs.org"
+repository = "https://github.com/yukihiko-shinoda/pyvelocity"
+# changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+[project.entry-points."console_scripts"]
+pyvelocity = "pyvelocity.cli:main"
+
+[tool.setuptools]
+zip-safe = false
+packages = ["pyvelocity"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+[tool.docformatter]
+recursive = true
+wrap-descriptions = 120
+wrap-summaries = 120
+
+[tool.isort]
+# @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 120
+
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = 120
+
+[tool.pydocstyle]
+# To add Google convention
+# see:
+# - Error Codes — pydocstyle 6.1.1 documentation
+#   http://www.pydocstyle.org/en/stable/error_codes.html#default-conventions
+add_select = ["D212", "D214", "D410", "D411", "D415", "D416", "D417"]
+# D400: First line may ends with ":" for expression.
+# D402: First line may ends with function signature for expression.
+# D415: First line may ends with ":" for expression.
+# D101: Docstring may be missed in public class since docstring-min-length is set.
+# D102: Docstring may be missed in public method since docstring-min-length is set.
+# D103: Docstring may be missed in public function since docstring-min-length is set.
+# D105: Docstring may be missed in magic method since docstring-min-length is set.
+# D105: Docstring may be missed in public nested class since docstring-min-length is set.
+# D107: Docstring may be missed in __init__ method since docstring-min-length is set.
+add_ignore = ["D400", "D401", "D402", "D415", "D101", "D102", "D103", "D105", "D106", "D107"]
+
+[tool.pylint.basic]
+docstring-min-length = "7"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.options]
+# Since this rule against single responsibility principle.
+# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+min-public-methods = "1"

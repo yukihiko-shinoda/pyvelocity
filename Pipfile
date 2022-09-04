@@ -1,0 +1,36 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+autoflake = "*"
+bandit = "*"
+black = "*"
+build = "*"
+bump2version = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
+colorama = "*"
+coverage = "*"
+docformatter = {extras = ["tomli"], version = "*"}
+dodgy = "*"
+flake8 = "*"
+invoke = "*"
+isort = "*"
+mypy = "*"
+pipenv-setup = "*"
+pydocstyle = "*"
+pylint = "*"
+pytest = "*"
+pytest-resource-path = "*"
+radon = "*"
+xenon = "*"
+pyvelocity = {editable = true, path = "."}
+
+[packages]
+click = ">=7.0"
+tomli = "*"
+# To use TypeGuard
+# Following definition causes mypy error in development environment (Pipenv issue.)
+# typing-extensions = {version = "*", markers="python_version < '3.10.0'"}
+typing-extensions = "*"
