@@ -25,6 +25,7 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-python.python",
+		"bungcip.better-toml",
 		"littlefoxteam.vscode-python-test-adapter",
 		"streetsidesoftware.code-spell-checker"
 	]
