@@ -1,4 +1,4 @@
-# PyVelocity
+# pyvelocity
 
 [![Test](https://github.com/yukihiko-shinoda/pyvelocity/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ATest)
 [![CodeQL](https://github.com/yukihiko-shinoda/pyvelocity/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ACodeQL)
