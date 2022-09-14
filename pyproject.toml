@@ -54,7 +54,6 @@ pyvelocity = "pyvelocity.cli:main"
 
 [tool.setuptools]
 zip-safe = false
-packages = ["pyvelocity"]
 
 [tool.setuptools.package-data]
 "*" = ["py.typed"]
