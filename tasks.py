@@ -11,7 +11,8 @@ from typing import Any
 
 import tomli
 from invoke import task  # type: ignore
-from invoke.runners import Failure, Result  # type: ignore
+from invoke.exceptions import Failure  # type: ignore
+from invoke.runners import Result  # type: ignore
 
 ROOT_DIR = Path(__file__).parent
 TEST_DIR = ROOT_DIR.joinpath("tests")
