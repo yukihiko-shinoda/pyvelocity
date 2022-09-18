@@ -42,7 +42,6 @@ def style(context, check=False):
         docformatter(context, check),
         isort(context, check),
         autoflake(context, check),
-        pipenv_setup(context, check),
         black(context, check),
     ]:
         if result.failed:
@@ -97,12 +96,6 @@ def isort(context, check=False) -> Result:
     """Runs isort."""
     isort_options = "--check-only --diff" if check else ""
     return context.run(f"isort {isort_options} {' '.join(PYTHON_DIRS)}", warn=True)
-
-
-def pipenv_setup(context, check=False) -> Result:
-    """Runs pipenv-setup."""
-    isort_options = "check --strict" if check else "sync --pipfile"
-    return context.run(f"pipenv-setup {isort_options}", warn=True)
 
 
 def black(context, check=False) -> Result:
