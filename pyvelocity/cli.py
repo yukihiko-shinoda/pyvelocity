@@ -8,6 +8,10 @@ from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
+def echo_success() -> None:
+    click.echo("Looks high velocity! ⚡️ 🚄 ✨")
+
+
 @click.command()
 def main() -> None:
     """Console script for pyvelocity."""
@@ -20,4 +24,4 @@ def main() -> None:
         exception = ClickException("Looks there are some of improvements.")
         exception.exit_code = 3
         raise exception
-    click.echo("Looks high velocity! ⚡️ 🚄 ✨")
+    echo_success()

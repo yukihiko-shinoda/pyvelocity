@@ -5,11 +5,8 @@ from click.testing import CliRunner
 from pyvelocity import cli
 
 
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
-    del response
+def test_echo_success():
+    cli.echo_success()
 
 
 @pytest.mark.parametrize(
