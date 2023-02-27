@@ -1,4 +1,6 @@
 """Tests for `pyvelocity` package."""
+from subprocess import PIPE, run
+
 from click.testing import CliRunner
 import pytest
 
@@ -7,6 +9,12 @@ from pyvelocity import cli
 
 def test_echo_success() -> None:
     cli.echo_success()
+
+
+def test_echo_success_in_subprocess() -> None:
+    # Reason: Accept risk of using subprocess.
+    completed_process = run("pyvelocity", check=True, stdout=PIPE, stderr=PIPE)  # nosec B603
+    assert completed_process.stdout.decode("utf-8") == "Looks high velocity! ⚡️ 🚄 ✨\n"
 
 
 @pytest.mark.parametrize(
