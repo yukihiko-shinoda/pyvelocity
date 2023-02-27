@@ -9,7 +9,17 @@ from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
 def echo_success() -> None:
-    click.echo("Looks high velocity! ⚡️ 🚄 ✨")
+    """Echos success even if can't use emoji."""
+    try:
+        click.echo("Looks high velocity! ⚡️ 🚄 ✨")
+    except UnicodeEncodeError:  # pragma: no cover
+        # see:
+        # - UnicodeEncodeError on Windows when there are Unicode chars in the help message
+        #    · Issue #2121 · pallets/click
+        #   https://github.com/pallets/click/issues/2121
+        # - UnicodeEncodeError in Windows agent CI pipelines
+        #   https://gist.github.com/NodeJSmith/e7e37f2d3f162456869f015f842bcf15
+        click.echo("Looks high velocity!")
 
 
 @click.command()
