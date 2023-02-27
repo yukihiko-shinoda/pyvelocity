@@ -4,9 +4,9 @@ from typing import Optional
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.sections import (
     ConfigurationFileParameter,
-    WhereToolDefault,
     flake8,
     is_not_none_value,
+    WhereToolDefault,
 )
 from pyvelocity.configurations.tools import Tool
 
@@ -23,7 +23,7 @@ class Flake8(Tool):
         if configuration_files.setup_cfg:
             self.overwrite(configuration_files.setup_cfg.flake8)
 
-    def overwrite(self, section_flake8: Optional[flake8.Flake8]):
+    def overwrite(self, section_flake8: Optional[flake8.Flake8]) -> None:
         if section_flake8:
             if is_not_none_value(section_flake8.max_line_length):
                 self.max_line_length = section_flake8.max_line_length

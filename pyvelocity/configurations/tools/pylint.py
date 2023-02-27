@@ -4,9 +4,9 @@ from typing import Optional
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.sections import (
     ConfigurationFileParameter,
-    WhereToolDefault,
     is_not_none_value,
     pylint,
+    WhereToolDefault,
 )
 from pyvelocity.configurations.tools import Tool
 

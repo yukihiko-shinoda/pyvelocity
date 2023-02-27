@@ -1,11 +1,11 @@
 """Tests for `pyvelocity` package."""
-import pytest
 from click.testing import CliRunner
+import pytest
 
 from pyvelocity import cli
 
 
-def test_echo_success():
+def test_echo_success() -> None:
     cli.echo_success()
 
 
@@ -26,14 +26,14 @@ def test_echo_success():
         ),
     ],
 )
-def test_command_line_interface(configured_cli_runner: CliRunner, expect_exit_code, expect_message):
+def test_command_line_interface(configured_cli_runner: CliRunner, expect_exit_code: int, expect_message: str) -> None:
     """Test the CLI."""
     result = configured_cli_runner.invoke(cli.main)
     assert result.exit_code == expect_exit_code
     assert result.output == expect_message
 
 
-def test_help():
+def test_help() -> None:
     runner = CliRunner()
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0

@@ -27,7 +27,7 @@ class TestChecks:
             ),
         ],
     )
-    def test(expect_message, expect_is_ok):
+    def test(expect_message: str, expect_is_ok: bool) -> None:
         """Tests general case."""
         configuration_files = ConfigurationFiles()
         configurations = Configurations(configuration_files)
@@ -37,7 +37,7 @@ class TestChecks:
 
     @staticmethod
     @pytest.mark.usefixtures("ch_tmp_path")
-    def test_no_py_project_toml():
+    def test_no_py_project_toml() -> None:
         """Tests case when no pyproject.toml."""
         configuration_files = ConfigurationFiles()
         configurations = Configurations(configuration_files)

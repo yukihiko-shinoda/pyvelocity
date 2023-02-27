@@ -1,8 +1,8 @@
 """Implements aggregation of checks."""
 from typing import Generator
 
-from pyvelocity.checks import Result
 from pyvelocity.checks.line_length import LineLength
+from pyvelocity.checks import Result
 from pyvelocity.checks.using_py_project_toml import UsingPyProjectToml
 from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
