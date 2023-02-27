@@ -3,5 +3,4 @@ services:
   pyvelocity:
     build:
       context: .
-      target: production
     image: futureys/pyvelocity:latest
