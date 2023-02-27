@@ -1,7 +1,7 @@
 """Implements sections for Pylint."""
 from configparser import ConfigParser
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, ClassVar, Optional
+from typing import Any, ClassVar, Optional, TYPE_CHECKING
 
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter, Section
 from pyvelocity.configurations.files.sections.factory import PyProjectTomlSectionFactory, SetupCfgSectionFactory

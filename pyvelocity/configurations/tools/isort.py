@@ -4,9 +4,9 @@ from typing import Optional
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.sections import (
     ConfigurationFileParameter,
-    WhereToolDefault,
     is_not_none_value,
     isort,
+    WhereToolDefault,
 )
 from pyvelocity.configurations.tools import Tool
 
@@ -25,7 +25,7 @@ class Isort(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.isort)
 
-    def overwrite(self, section_isort: Optional[isort.Isort]):
+    def overwrite(self, section_isort: Optional[isort.Isort]) -> None:
         if section_isort:
             if is_not_none_value(section_isort.line_length):
                 self.line_length = section_isort.line_length

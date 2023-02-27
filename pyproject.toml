@@ -43,6 +43,9 @@ classifiers=[
     "Typing :: Typed"
 ]
 
+[project.optional-dependencies]
+test = []
+
 [project.urls]
 homepage = "https://github.com/yukihiko-shinoda/pyvelocity"
 # documentation = "https://readthedocs.org"
@@ -55,132 +58,9 @@ pyvelocity = "pyvelocity.cli:main"
 [tool.setuptools]
 zip-safe = false
 
-[tool.setuptools.packages.find]
-where = ["."]
-exclude = [
-  "htmlcov",
-  # Setuptools default.
-  # see:
-  # - [FR] The way to not overwrite but inherit DEFAULT_EXCLUDE when define find package exclude · Issue #3594 · pypa/setuptools
-  #   https://github.com/pypa/setuptools/issues/3594
-  # - setuptools/discovery.py at 92ebeed732b08ac29576634ad4814b9efd07bb37 · pypa/setuptools
-  #   https://github.com/pypa/setuptools/blob/92ebeed732b08ac29576634ad4814b9efd07bb37/setuptools/discovery.py
-  # FlatLayoutPackageFinder
-  "ci",
-  "ci.*",
-  "bin",
-  "bin.*",
-  "doc",
-  "doc.*",
-  "docs",
-  "docs.*",
-  "documentation",
-  "documentation.*",
-  "manpages",
-  "manpages.*",
-  "news",
-  "news.*",
-  "changelog",
-  "changelog.*",
-  "test",
-  "test.*",
-  "tests",
-  "tests.*",
-  "unit_test",
-  "unit_test.*",
-  "unit_tests",
-  "unit_tests.*",
-  "example",
-  "example.*",
-  "examples",
-  "examples.*",
-  "scripts",
-  "scripts.*",
-  "tools",
-  "tools.*",
-  "util",
-  "util.*",
-  "utils",
-  "utils.*",
-  "python",
-  "python.*",
-  "build",
-  "build.*",
-  "dist",
-  "dist.*",
-  "venv",
-  "venv.*",
-  "env",
-  "env.*",
-  "requirements",
-  "requirements.*",
-  # ---- Task runners / Build tools ----
-  "tasks",  # invoke
-  "tasks.*",  # invoke
-  "fabfile",  # fabric
-  "fabfile.*",  # fabric
-  "site_scons",  # SCons
-  "site_scons.*",  # SCons
-  # ---- Other tools ----
-  "benchmark",
-  "benchmark.*",
-  "benchmarks",
-  "benchmarks.*",
-  "exercise",
-  "exercise.*",
-  "exercises",
-  "exercises.*",
-  # ---- Hidden directories/Private packages ----
-  "[._]*",
-  # FlatLayoutModuleFinder
-  "setup",
-  "setup.*",
-  "conftest",
-  "conftest.*",
-  "test",
-  "test.*",
-  "tests",
-  "tests.*",
-  "example",
-  "example.*",
-  "examples",
-  "examples.*",
-  "build",
-  "build.*",
-  # ---- Task runners ----
-  "toxfile",
-  "toxfile.*",
-  "noxfile",
-  "noxfile.*",
-  "pavement",
-  "pavement.*",
-  "dodo",
-  "dodo.*",
-  "tasks",
-  "tasks.*",
-  "fabfile",
-  "fabfile.*",
-  # ---- Other tools ----
-  "[Ss][Cc]onstruct",  # SCons
-  "[Ss][Cc]onstruct.*",  # SCons
-  "conanfile",  # Connan: C/C++ build tool
-  "conanfile.*",  # Connan: C/C++ build tool
-  "manage",  # Django
-  "manage.*",  # Django
-  "benchmark",
-  "benchmark.*",
-  "benchmarks",
-  "benchmarks.*",
-  "exercise",
-  "exercise.*",
-  "exercises",
-  "exercises.*",
-  # ---- Hidden files/Private modules ----
-  "[._]*",
-]
-
-[tool.setuptools.package-data]
-"*" = ["py.typed"]
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = 120
 
 [tool.docformatter]
 recursive = true
@@ -194,10 +74,20 @@ include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
 line_length = 120
+# For compatibility with PyLint and Hacking, Google also supports, 
+# Black doesn't have any opinions
+# see:
+# - https://pycqa.github.io/isort/docs/configuration/profiles.html
+# - https://qiita.com/kaityo256/items/5b0b55d105ef2366cb0c
+# - https://www.xn--ebkc7kqd.com/entry/hacking-isort
+force_sort_within_sections = true
+lexicographical = true
+# Google supports, Black doesn't have any opinions
+# see: https://pycqa.github.io/isort/docs/configuration/profiles.html
+order_by_type = false
 
-# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
-[tool.black]
-line-length = 120
+[tool.mypy]
+strict = true
 
 [tool.pydocstyle]
 # To add Google convention
@@ -226,3 +116,8 @@ max-line-length = 120
 # Since this rule against single responsibility principle.
 # @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
 min-public-methods = "1"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

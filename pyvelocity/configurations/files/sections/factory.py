@@ -1,5 +1,5 @@
 """Implements section factory."""
-from typing import TYPE_CHECKING, Any, MutableMapping, Optional, TypeVar
+from typing import Any, Generic, MutableMapping, Optional, TYPE_CHECKING, TypeVar
 
 from pyvelocity.configurations.files import ConfigurationFile
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter, Section, WhereFile
@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
 TypeVarSection = TypeVar("TypeVarSection", bound=Section)
 
 
-class SectionFactory:
+class SectionFactory(Generic[TypeVarSection]):
     """Factory for Section instance."""
 
     def __init__(
@@ -19,7 +19,7 @@ class SectionFactory:
         configuration_file: ConfigurationFile,
         node: Optional[str],
         class_section: type[TypeVarSection],
-        config: dict[str, Any],
+        config: dict[str, str],
     ) -> None:
         self.configuration_file = configuration_file
         self.node = node
@@ -33,7 +33,7 @@ class SectionFactory:
         ]
         return self.class_section(self.configuration_file, *configurations)
 
-    def create_configuration_parameter(self, parameter_name) -> ConfigurationFileParameter:
+    def create_configuration_parameter(self, parameter_name: str) -> ConfigurationFileParameter[Optional[str]]:
         return ConfigurationFileParameter(
             WhereFile(self.configuration_file, self.class_section, self.node),
             parameter_name,
@@ -68,7 +68,7 @@ class SetupCfgSectionFactory:
         setup_cfg: "SetupCfg",
         node: Optional[str],
         class_configuration: type[TypeVarSection],
-        config_parser: MutableMapping,
+        config_parser: MutableMapping[str, Any],
     ) -> Optional[TypeVarSection]:
         """Creates Section instance for SetupCfg."""
         try:

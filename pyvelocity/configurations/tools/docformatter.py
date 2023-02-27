@@ -9,9 +9,9 @@ from typing import Optional
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.sections import (
     ConfigurationFileParameter,
-    WhereToolDefault,
     docformatter,
     is_not_none_value,
+    WhereToolDefault,
 )
 from pyvelocity.configurations.tools import Tool
 
@@ -34,7 +34,7 @@ class Docformatter(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.docformatter)
 
-    def overwrite(self, section_docformatter: Optional[docformatter.Docformatter]):
+    def overwrite(self, section_docformatter: Optional[docformatter.Docformatter]) -> None:
         if section_docformatter:
             if is_not_none_value(section_docformatter.wrap_descriptions):
                 self.wrap_descriptions = section_docformatter.wrap_descriptions

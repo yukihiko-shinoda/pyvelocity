@@ -4,9 +4,9 @@ from typing import Optional
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.sections import (
     ConfigurationFileParameter,
-    WhereToolDefault,
     is_not_none_value,
     pyvelocity,
+    WhereToolDefault,
 )
 from pyvelocity.configurations.tools import Tool
 
@@ -23,7 +23,7 @@ class Pyvelocity(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.pyvelocity)
 
-    def overwrite(self, section_pyvelocity: Optional[pyvelocity.Pyvelocity]):
+    def overwrite(self, section_pyvelocity: Optional[pyvelocity.Pyvelocity]) -> None:
         if section_pyvelocity:
             if is_not_none_value(section_pyvelocity.filter):
                 self.filter = section_pyvelocity.filter

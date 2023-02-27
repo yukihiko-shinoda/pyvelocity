@@ -15,7 +15,7 @@ coverage = "*"
 docformatter = {extras = ["tomli"], version = "*"}
 dodgy = "*"
 flake8 = "*"
-invoke = "*"
+invokelint = "*"
 isort = "*"
 mypy = "*"
 pydocstyle = "*"
@@ -23,6 +23,7 @@ pylint = "*"
 pytest = "*"
 pytest-resource-path = "*"
 radon = "*"
+types-invoke = "*"
 xenon = "*"
 pyvelocity = {editable = true, path = "."}
 

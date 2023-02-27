@@ -1,8 +1,8 @@
 """Implements aggregation of configuration files."""
 from pathlib import Path
 
-from pyvelocity.configurations.files.py_project_toml import WHERE_PY_PROJECT_TOML, PyProjectToml
-from pyvelocity.configurations.files.setup_cfg import WHERE_SETUP_CFG, SetupCfg
+from pyvelocity.configurations.files.py_project_toml import PyProjectToml, WHERE_PY_PROJECT_TOML
+from pyvelocity.configurations.files.setup_cfg import SetupCfg, WHERE_SETUP_CFG
 
 
 # Reason: Aggregation class. pylint: disable=too-few-public-methods

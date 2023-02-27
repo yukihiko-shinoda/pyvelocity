@@ -12,7 +12,7 @@ class LineLength(Check):
     ID = "line-length"
 
     def execute(self) -> Result:
-        target_configurations: list[ConfigurationFileParameter] = []
+        target_configurations: list[ConfigurationFileParameter[int]] = []
         target_configurations = [
             self.configurations.docformatter.wrap_descriptions,
             self.configurations.docformatter.wrap_summaries,
@@ -29,7 +29,7 @@ class LineLength(Check):
 
     @staticmethod
     def build_message(
-        most_common: tuple[Optional[Any], int], target_configurations: list[ConfigurationFileParameter]
+        most_common: tuple[Optional[Any], int], target_configurations: list[ConfigurationFileParameter[int]]
     ) -> str:
         """Builds message."""
         error_messages = [
