@@ -1,3 +1,25 @@
+[dependency-groups]
+dev = [
+  "autoflake",
+  "bandit",
+  "black",
+  "build",
+  "bump-my-version",
+  "coverage",
+  "docformatter[tomli]",
+  "dodgy",
+  "flake8",
+  "invokelint",
+  "isort",
+  "mypy",
+  "pydocstyle",
+  "pylint",
+  "pytest",
+  "pytest-resource-path",
+  "radon",
+  "types-invoke",
+  "xenon"
+]
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
@@ -11,6 +33,9 @@ requires-python = ">=3.9"
 dependencies = [
   "click>=7.0",
   "tomli",
+  # To use TypeGuard
+  # Following definition causes mypy error in development environment (Pipenv issue.)
+  # typing-extensions = {version = "*", markers="python_version < '3.10.0'"}
   "typing-extensions"
 ]
 license = {file = "LICENSE"}
