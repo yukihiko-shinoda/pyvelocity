@@ -1,12 +1,16 @@
 """Implements line length check."""
 
+from __future__ import annotations
+
 from collections import Counter
+from typing import TYPE_CHECKING
 from typing import Any
-from typing import Optional
 
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
-from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 
 
 class LineLength(Check):
@@ -32,7 +36,7 @@ class LineLength(Check):
 
     @staticmethod
     def build_message(
-        most_common: tuple[Optional[Any], int],
+        most_common: tuple[Any | None, int],
         target_configurations: list[ConfigurationFileParameter[int]],
     ) -> str:
         """Builds message."""

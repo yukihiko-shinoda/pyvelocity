@@ -1,8 +1,9 @@
 """Implements section for docformatter."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import ClassVar
-from typing import Optional
 
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import Section
@@ -17,5 +18,5 @@ class Docformatter(Section):
         "wrap-descriptions",
         "wrap-summaries",
     ]
-    wrap_descriptions: ConfigurationFileParameter[Optional[int]]
-    wrap_summaries: ConfigurationFileParameter[Optional[int]]
+    wrap_descriptions: ConfigurationFileParameter[int | None]
+    wrap_summaries: ConfigurationFileParameter[int | None]

@@ -1,13 +1,17 @@
 """Implements Black configurations."""
 
-from typing import Optional
+from __future__ import annotations
 
-from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+from typing import TYPE_CHECKING
+
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import WhereToolDefault
 from pyvelocity.configurations.files.sections import black
 from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.tools import Tool
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
 class Black(Tool):
@@ -24,7 +28,6 @@ class Black(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.black)
 
-    def overwrite(self, section_black: Optional[black.Black]) -> None:
-        if section_black:
-            if is_not_none_value(section_black.line_length):
-                self.line_length = section_black.line_length
+    def overwrite(self, section_black: black.Black | None) -> None:
+        if section_black and is_not_none_value(section_black.line_length):
+            self.line_length = section_black.line_length

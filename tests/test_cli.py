@@ -2,7 +2,6 @@
 
 # Reason: Accept risk of using subprocess.
 import os
-from subprocess import PIPE  # nosec B404
 from subprocess import run  # nosec B404
 
 import pytest
@@ -30,13 +29,13 @@ def test_echo_success_in_subprocess() -> None:
       https://gist.github.com/NodeJSmith/e7e37f2d3f162456869f015f842bcf15
     """
     # Reason: Accept risk of using subprocess.
-    completed_process = run("pyvelocity", check=True, stdout=PIPE, stderr=PIPE)  # nosec B603 B607
+    completed_process = run("pyvelocity", check=True, capture_output=True)  # nosec B603 B607  # noqa: S607
     expected = ["Looks high velocity! ⚡️ 🚄 ✨\n", f"Looks high velocity!{os.linesep}"]
     assert completed_process.stdout.decode("utf-8") in expected
 
 
 @pytest.mark.parametrize(
-    "files, expect_exit_code, expect_message",
+    ("files", "expect_exit_code", "expect_message"),
     [
         (["pyproject_success.toml", "setup_success.cfg"], 0, "Looks high velocity! ⚡️ 🚄 ✨\n"),
         (

@@ -1,18 +1,20 @@
 """Implements section factory."""
 
-from collections.abc import MutableMapping
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Generic
-from typing import Optional
 from typing import TypeVar
 
-from pyvelocity.configurations.files import ConfigurationFile
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import Section
 from pyvelocity.configurations.files.sections import WhereFile
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import MutableMapping
+
+    from pyvelocity.configurations.files import ConfigurationFile
     from pyvelocity.configurations.files.py_project_toml import PyProjectToml
     from pyvelocity.configurations.files.setup_cfg import SetupCfg
 
@@ -25,7 +27,7 @@ class SectionFactory(Generic[TypeVarSection]):
     def __init__(
         self,
         configuration_file: ConfigurationFile,
-        node: Optional[str],
+        node: str | None,
         class_section: type[TypeVarSection],
         config: dict[str, str],
     ) -> None:
@@ -41,7 +43,7 @@ class SectionFactory(Generic[TypeVarSection]):
         ]
         return self.class_section(self.configuration_file, *configurations)
 
-    def create_configuration_parameter(self, parameter_name: str) -> ConfigurationFileParameter[Optional[str]]:
+    def create_configuration_parameter(self, parameter_name: str) -> ConfigurationFileParameter[str | None]:
         return ConfigurationFileParameter(
             WhereFile(self.configuration_file, self.class_section, self.node),
             parameter_name,
@@ -55,11 +57,11 @@ class PyProjectTomlSectionFactory:
     @classmethod
     def create(
         cls,
-        py_project_toml: "PyProjectToml",
+        py_project_toml: PyProjectToml,
         node: str,
         class_configuration: type[TypeVarSection],
-        tool: dict[str, Optional[dict[str, Any]]],
-    ) -> Optional[TypeVarSection]:
+        tool: dict[str, dict[str, Any] | None],
+    ) -> TypeVarSection | None:
         """Creates Section instance for PyProjectToml."""
         config = tool.get(class_configuration.NAME)
         if not config:
@@ -73,11 +75,11 @@ class SetupCfgSectionFactory:
     @classmethod
     def create(
         cls,
-        setup_cfg: "SetupCfg",
-        node: Optional[str],
+        setup_cfg: SetupCfg,
+        node: str | None,
         class_configuration: type[TypeVarSection],
         config_parser: MutableMapping[str, Any],
-    ) -> Optional[TypeVarSection]:
+    ) -> TypeVarSection | None:
         """Creates Section instance for SetupCfg."""
         try:
             config = dict(config_parser[f"{node}.{class_configuration.NAME}" if node else class_configuration.NAME])

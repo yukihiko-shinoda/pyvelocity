@@ -1,13 +1,17 @@
 """Implements isort."""
 
-from typing import Optional
+from __future__ import annotations
 
-from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+from typing import TYPE_CHECKING
+
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import WhereToolDefault
 from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.files.sections import isort
 from pyvelocity.configurations.tools import Tool
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
 class Isort(Tool):
@@ -26,7 +30,6 @@ class Isort(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.isort)
 
-    def overwrite(self, section_isort: Optional[isort.Isort]) -> None:
-        if section_isort:
-            if is_not_none_value(section_isort.line_length):
-                self.line_length = section_isort.line_length
+    def overwrite(self, section_isort: isort.Isort | None) -> None:
+        if section_isort and is_not_none_value(section_isort.line_length):
+            self.line_length = section_isort.line_length

@@ -3,11 +3,9 @@
 import shutil
 from collections.abc import Generator
 from pathlib import Path
-from typing import List
 
 import pytest
 from click.testing import CliRunner
-from pytest import MonkeyPatch
 
 collect_ignore = ["setup.py"]
 
@@ -16,7 +14,7 @@ collect_ignore = ["setup.py"]
 def configured_cli_runner(
     tmp_path: Path,
     resource_path_root: Path,
-    files: List[str],
+    files: list[str],
 ) -> Generator[CliRunner, None, None]:
     """Prepares CLI runner with configuration files in temporary directory."""
     runner = CliRunner()
@@ -28,7 +26,7 @@ def configured_cli_runner(
 
 
 @pytest.fixture
-def ch_tmp_path(tmp_path: Path, monkeypatch: MonkeyPatch) -> Path:
+def ch_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Changes directory to temporary directory."""
     monkeypatch.chdir(tmp_path)
     return tmp_path
@@ -36,7 +34,7 @@ def ch_tmp_path(tmp_path: Path, monkeypatch: MonkeyPatch) -> Path:
 
 # Reason: Fixture. pylint: disable=redefined-outer-name
 @pytest.fixture
-def configured_tmp_path(ch_tmp_path: Path, resource_path_root: Path, files: List[str]) -> Path:
+def configured_tmp_path(ch_tmp_path: Path, resource_path_root: Path, files: list[str]) -> Path:
     """Prepares configuration files in temporary directory."""
     shutil.copy(resource_path_root / files[0], ch_tmp_path / "pyproject.toml")
     shutil.copy(resource_path_root / files[1], ch_tmp_path / "setup.cfg")

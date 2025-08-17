@@ -1,8 +1,9 @@
 """Implements section for Flake8."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import ClassVar
-from typing import Optional
 
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import Section
@@ -14,10 +15,10 @@ class Flake8(Section):
 
     NAME: ClassVar[str] = "flake8"
     LIST_PARAMETER_NAME: ClassVar[list[str]] = ["max-line-length"]
-    _max_line_length: ConfigurationFileParameter[Optional[str]]
+    _max_line_length: ConfigurationFileParameter[str | None]
 
     @property
-    def max_line_length(self) -> ConfigurationFileParameter[Optional[int]]:
+    def max_line_length(self) -> ConfigurationFileParameter[int | None]:
         return ConfigurationFileParameter(
             self._max_line_length.where,
             self._max_line_length.name,

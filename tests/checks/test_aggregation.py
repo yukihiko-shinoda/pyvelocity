@@ -14,7 +14,7 @@ class TestChecks:
     @staticmethod
     @pytest.mark.usefixtures("configured_tmp_path")
     @pytest.mark.parametrize(
-        "files, expect_message, expect_is_ok",
+        ("files", "expect_message", "expect_is_ok"),
         [
             (["pyproject_success.toml", "setup_success.cfg"], "", True),
             (
@@ -29,7 +29,7 @@ class TestChecks:
             ),
         ],
     )
-    def test(expect_message: str, expect_is_ok: bool) -> None:
+    def test(expect_message: str, *, expect_is_ok: bool) -> None:
         """Tests general case."""
         configuration_files = ConfigurationFiles()
         configurations = Configurations(configuration_files)

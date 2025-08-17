@@ -1,13 +1,17 @@
 """Implements pyvelocity configurations."""
 
-from typing import Optional
+from __future__ import annotations
 
-from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+from typing import TYPE_CHECKING
+
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import WhereToolDefault
 from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.files.sections import pyvelocity
 from pyvelocity.configurations.tools import Tool
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
 class Pyvelocity(Tool):
@@ -24,7 +28,6 @@ class Pyvelocity(Tool):
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.pyvelocity)
 
-    def overwrite(self, section_pyvelocity: Optional[pyvelocity.Pyvelocity]) -> None:
-        if section_pyvelocity:
-            if is_not_none_value(section_pyvelocity.filter):
-                self.filter = section_pyvelocity.filter
+    def overwrite(self, section_pyvelocity: pyvelocity.Pyvelocity | None) -> None:
+        if section_pyvelocity and is_not_none_value(section_pyvelocity.filter):
+            self.filter = section_pyvelocity.filter

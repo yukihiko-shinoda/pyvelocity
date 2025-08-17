@@ -1,11 +1,11 @@
 """Implements sections for Pylint."""
 
-from configparser import ConfigParser
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
-from typing import Optional
 
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import Section
@@ -13,6 +13,8 @@ from pyvelocity.configurations.files.sections.factory import PyProjectTomlSectio
 from pyvelocity.configurations.files.sections.factory import SetupCfgSectionFactory
 
 if TYPE_CHECKING:  # pragma: no cover
+    from configparser import ConfigParser
+
     from pyvelocity.configurations.files.py_project_toml import PyProjectToml
     from pyvelocity.configurations.files.setup_cfg import SetupCfg
 
@@ -21,7 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class Format(Section):
     NAME: ClassVar[str] = "format"
     LIST_PARAMETER_NAME: ClassVar[list[str]] = ["max-line-length"]
-    max_line_length: ConfigurationFileParameter[Optional[int]]
+    max_line_length: ConfigurationFileParameter[int | None]
 
 
 # Reason: Aggregation class. pylint: disable=too-many-instance-attributes
@@ -35,7 +37,7 @@ class Pylint:
     classes: None
     design: None
     exceptions: None
-    format: Optional[Format]
+    format: Format | None
     imports: None
     logging: None
     method_args: None
@@ -58,10 +60,10 @@ class PyProjectTomlPylintFactory:
 
     @staticmethod
     def create(
-        py_project_toml: "PyProjectToml",
+        py_project_toml: PyProjectToml,
         node: str,
-        tool: dict[str, Optional[dict[str, Any]]],
-    ) -> Optional[Pylint]:
+        tool: dict[str, dict[str, Any] | None],
+    ) -> Pylint | None:
         """Creates node of Pylint."""
         config = tool.get(Pylint.NAME)
         if not config:
@@ -95,7 +97,7 @@ class SetupCfgPylintFactory:
     """Factory for pylint node."""
 
     @staticmethod
-    def create(setup_cfg: "SetupCfg", config_parser: ConfigParser) -> Optional[Pylint]:
+    def create(setup_cfg: SetupCfg, config_parser: ConfigParser) -> Pylint | None:
         """Creates node of Pylint."""
         pylint = Pylint(
             None,

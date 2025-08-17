@@ -1,13 +1,17 @@
 """Implements Pylint configurations."""
 
-from typing import Optional
+from __future__ import annotations
 
-from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+from typing import TYPE_CHECKING
+
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import WhereToolDefault
 from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.files.sections import pylint
 from pyvelocity.configurations.tools import Tool
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 
 class Format(Tool):
@@ -26,10 +30,9 @@ class Format(Tool):
         if configuration_files.py_project_toml and configuration_files.py_project_toml.pylint:
             self.overwrite(configuration_files.py_project_toml.pylint.format)
 
-    def overwrite(self, pylint_format: Optional[pylint.Format]) -> None:
-        if pylint_format:
-            if is_not_none_value(pylint_format.max_line_length):
-                self.max_line_length = pylint_format.max_line_length
+    def overwrite(self, pylint_format: pylint.Format | None) -> None:
+        if pylint_format and is_not_none_value(pylint_format.max_line_length):
+            self.max_line_length = pylint_format.max_line_length
 
 
 # Reason: Aggregation of Pylint sections. pylint: disable=too-few-public-methods
