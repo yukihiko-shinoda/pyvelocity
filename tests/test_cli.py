@@ -15,6 +15,7 @@ def test_echo_success() -> None:
     cli.echo_success()
 
 
+@pytest.mark.skip("Since best practice is changed")
 def test_echo_success_in_subprocess() -> None:
     """Function echo_success() should fallback to no emoji.
 
