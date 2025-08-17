@@ -72,32 +72,31 @@ dependencies = [
 ]
 license = {file = "LICENSE"}
 authors = [
-    {name = "Yukihiko Shinoda"},
-    {email = "yuk.hik.future@gmail.com"},
+  {name = "Yukihiko Shinoda", email = "yuk.hik.future@gmail.com"},
 ]
 maintainers = [
   {name = "Yukihiko Shinoda", email = "yuk.hik.future@gmail.com"}
 ]
-keywords = ["pyvelocity"]
+keywords = ["pyvelocity", "pyproject.toml"]
 classifiers=[
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved",
-    "License :: OSI Approved :: MIT License",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Bug Tracking",
-    "Topic :: Software Development :: Build Tools",
-    "Topic :: Software Development :: Quality Assurance",
-    "Topic :: Software Development :: Testing",
-    "Topic :: System",
-    "Topic :: System :: Software Distribution",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Typing :: Typed"
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Bug Tracking",
+  "Topic :: Software Development :: Build Tools",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+  "Topic :: System",
+  "Topic :: System :: Software Distribution",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Typing :: Typed"
 ]
 
 [project.optional-dependencies]
@@ -109,20 +108,46 @@ homepage = "https://github.com/yukihiko-shinoda/pyvelocity"
 repository = "https://github.com/yukihiko-shinoda/pyvelocity"
 # changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
-[project.entry-points."console_scripts"]
+[project.scripts]
 pyvelocity = "pyvelocity.cli:main"
 
-[tool.setuptools]
-zip-safe = false
+[tool.bandit.assert_used]
+skips = ["tests/*"]
 
-# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
-[tool.black]
-line-length = 120
+[tool.bumpversion]
+current_version = "0.1.3"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "pyvelocity/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[tool.coverage.report]
+exclude_also = [
+    # Assume `if TYPE_CHECKING: ... else: ...` block is covered · Issue #831 · nedbat/coveragepy
+    #   https://github.com/nedbat/coveragepy/issues/831#issuecomment-517778185
+    "if TYPE_CHECKING:",
+    # Pylint will detect instead:
+    # - abstract-method / W0223 - Pylint 2.17.0-dev0 documentation
+    #   https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/abstract-method.html
+    "raise NotImplementedError",
+]
 
 [tool.docformatter]
 recursive = true
-wrap-descriptions = 120
-wrap-summaries = 120
+# For compatibility with Black
+# - How to Configure docformatter — docformatter 1.7.5 documentation
+#   https://docformatter.readthedocs.io/en/stable/configuration.html#a-note-on-options-to-control-styles
+pre_summary_space = true
+wrap-descriptions = 119
+wrap-summaries = 119
 
 [tool.flake8]
 # Since B950 in flake8-bugbear detects lines that exceed max_line_length by more than 10%:
@@ -150,54 +175,19 @@ exclude = [
   ".venv",
 ]
 
-[tool.isort]
-# @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 120
-# For compatibility with PyLint and Hacking, Google also supports, 
-# Black doesn't have any opinions
-# see:
-# - https://pycqa.github.io/isort/docs/configuration/profiles.html
-# - https://qiita.com/kaityo256/items/5b0b55d105ef2366cb0c
-# - https://www.xn--ebkc7kqd.com/entry/hacking-isort
-force_sort_within_sections = true
-lexicographical = true
-# Google supports, Black doesn't have any opinions
-# see: https://pycqa.github.io/isort/docs/configuration/profiles.html
-order_by_type = false
-
 [tool.mypy]
 strict = true
-
-[tool.pydocstyle]
-# To add Google convention
-# see:
-# - Error Codes — pydocstyle 6.1.1 documentation
-#   http://www.pydocstyle.org/en/stable/error_codes.html#default-conventions
-add_select = ["D212", "D214", "D410", "D411", "D415", "D416", "D417"]
-# D400: First line may ends with ":" for expression.
-# D402: First line may ends with function signature for expression.
-# D415: First line may ends with ":" for expression.
-# D101: Docstring may be missed in public class since docstring-min-length is set.
-# D102: Docstring may be missed in public method since docstring-min-length is set.
-# D103: Docstring may be missed in public function since docstring-min-length is set.
-# D105: Docstring may be missed in magic method since docstring-min-length is set.
-# D105: Docstring may be missed in public nested class since docstring-min-length is set.
-# D107: Docstring may be missed in __init__ method since docstring-min-length is set.
-add_ignore = ["D400", "D401", "D402", "D415", "D101", "D102", "D103", "D105", "D106", "D107"]
 
 [tool.pylint.basic]
 docstring-min-length = "7"
 
 [tool.pylint.format]
-max-line-length = 120
+max-line-length = 119
 
 [tool.pylint.options]
 # Since this rule against single responsibility principle.
-# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+# - python - Why does Pylint want two public methods per class? - Stack Overflow
+#   https://stackoverflow.com/a/40258006/12721873
 min-public-methods = "1"
 
 [tool.pytest.ini_options]
@@ -209,3 +199,45 @@ markers = [
 cc_min = "B"
 show_complexity = true
 show_mi = true
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # lint.pydocstyle
+    # Reason: Docstring may be missed since docstring-min-length is set.
+    "D101",    # Missing docstring in public class
+    "D102",    # Missing docstring in public method
+    "D103",    # Missing docstring in public function
+    "D105",    # Missing docstring in magic method
+    "D106",    # Missing docstring in public nested class
+    "D107",    # Missing docstring in __init__
+    # Reason: First line may ends with function signature for expression.
+    "D402",    # First line should not be the function’s “signature”
+    # Reason: First line may ends with ":" for expression.
+    "D415",    # First line should end with a period, question mark, or exclamation point
+    # Reason: `Line too long` is checked by flake8-bugbear.
+    "E501",    # Line too long ({width} > {limit})
+]
+unfixable = [
+    # When fix `return a and b != ""` as `return a and b`, mypy will report warning:
+    #   error: Incompatible return value type (got "Union[Literal[False], str]", expected "bool")  [return-value]
+    "PLC1901",
+]
+[tool.ruff.lint.isort]
+# To follow H301: Do not import more than one module per line (*) in Flake8 + openstack/hacking
+force-single-line = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
