@@ -1,12 +1,13 @@
-FROM python:3.11.2-slim-bullseye
-# FROM python:3.7.16-slim-bullseye
-# setuptools 65.3.0 can't lock package defined its dependencies by pyproject.toml
-RUN pip install --no-cache-dir --upgrade pip==23.0.1 setuptools==67.4.0
-# see: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
-ENV PIPENV_VENV_IN_PROJECT=1
+FROM node:24.6.0-trixie-slim
 WORKDIR /workspace
-COPY . /workspace
-RUN pip --no-cache-dir install pipenv==2023.2.18 \
- && pipenv install --skip-lock --dev
-ENTRYPOINT [ "pipenv", "run" ]
-CMD ["pytest"]
+COPY --from=ghcr.io/astral-sh/uv:0.8.11 /uv /uvx /bin/
+RUN npm install -g @anthropic-ai/claude-code@1.0.83
+# The uv command also errors out when installing semgrep:
+# - Getting semgrep-core in pipenv · Issue #2929 · semgrep/semgrep
+#   https://github.com/semgrep/semgrep/issues/2929#issuecomment-818994969
+ENV SEMGREP_SKIP_BIN=true
+COPY pyproject.toml /workspace/
+RUN uv sync
+COPY . /workspace/
+ENTRYPOINT [ "uv", "run" ]
+CMD ["invoke", "test.coverage"]
