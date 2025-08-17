@@ -1,4 +1,5 @@
-"""implements aggregation of tools."""
+"""Implements aggregation of tools."""
+
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.tools.black import Black
 from pyvelocity.configurations.tools.docformatter import Docformatter

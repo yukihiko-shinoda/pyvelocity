@@ -1,8 +1,11 @@
 """Implements line length check."""
-from collections import Counter
-from typing import Any, Optional
 
-from pyvelocity.checks import Check, Result
+from collections import Counter
+from typing import Any
+from typing import Optional
+
+from pyvelocity.checks import Check
+from pyvelocity.checks import Result
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 
 
@@ -29,12 +32,13 @@ class LineLength(Check):
 
     @staticmethod
     def build_message(
-        most_common: tuple[Optional[Any], int], target_configurations: list[ConfigurationFileParameter[int]]
+        most_common: tuple[Optional[Any], int],
+        target_configurations: list[ConfigurationFileParameter[int]],
     ) -> str:
         """Builds message."""
         error_messages = [
-            f"{target_configuration.full_name} = {str(target_configuration.value)}"
+            f"{target_configuration.full_name} = {target_configuration.value!s}"
             for target_configuration in target_configurations
             if target_configuration.value != most_common[0]
         ]
-        return "Line length are not consistent.\n\t" f"Most common = {most_common[0]}\n\t" + "\n\t".join(error_messages)
+        return f"Line length are not consistent.\n\tMost common = {most_common[0]}\n\t" + "\n\t".join(error_messages)

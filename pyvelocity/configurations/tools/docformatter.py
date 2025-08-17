@@ -4,30 +4,33 @@ see:
   - Welcome to docformatter! — docformatter documentation
     https://docformatter.readthedocs.io/en/latest/
 """
+
 from typing import Optional
 
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
-from pyvelocity.configurations.files.sections import (
-    ConfigurationFileParameter,
-    docformatter,
-    is_not_none_value,
-    WhereToolDefault,
-)
+from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import WhereToolDefault
+from pyvelocity.configurations.files.sections import docformatter
+from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.tools import Tool
 
 
 class Docformatter(Tool):
-    """docformatter configurations."""
+    """Docformatter configurations."""
 
     NAME = "docformatter"
 
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         where_tool_default = WhereToolDefault(self)
         self.wrap_descriptions = ConfigurationFileParameter(
-            where_tool_default, ConfigurationFileParameter.NAME_TOOL_DEFAULT, 72
+            where_tool_default,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            72,
         )
         self.wrap_summaries = ConfigurationFileParameter(
-            where_tool_default, ConfigurationFileParameter.NAME_TOOL_DEFAULT, 79
+            where_tool_default,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            79,
         )
         if configuration_files.setup_cfg:
             self.overwrite(configuration_files.setup_cfg.docformatter)

@@ -1,8 +1,12 @@
 """Implements configuration file sections."""
+
+import sys
 from abc import ABC
 from dataclasses import dataclass
-import sys
-from typing import ClassVar, Generic, Optional, TypeVar
+from typing import ClassVar
+from typing import Generic
+from typing import Optional
+from typing import TypeVar
 
 from pyvelocity.configurations.files import ConfigurationFile
 from pyvelocity.configurations.tools import Tool

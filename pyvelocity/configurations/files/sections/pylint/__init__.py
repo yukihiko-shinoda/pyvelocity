@@ -1,10 +1,16 @@
 """Implements sections for Pylint."""
+
 from configparser import ConfigParser
 from dataclasses import dataclass
-from typing import Any, ClassVar, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import ClassVar
+from typing import Optional
 
-from pyvelocity.configurations.files.sections import ConfigurationFileParameter, Section
-from pyvelocity.configurations.files.sections.factory import PyProjectTomlSectionFactory, SetupCfgSectionFactory
+from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import Section
+from pyvelocity.configurations.files.sections.factory import PyProjectTomlSectionFactory
+from pyvelocity.configurations.files.sections.factory import SetupCfgSectionFactory
 
 if TYPE_CHECKING:  # pragma: no cover
     from pyvelocity.configurations.files.py_project_toml import PyProjectToml
@@ -52,7 +58,9 @@ class PyProjectTomlPylintFactory:
 
     @staticmethod
     def create(
-        py_project_toml: "PyProjectToml", node: str, tool: dict[str, Optional[dict[str, Any]]]
+        py_project_toml: "PyProjectToml",
+        node: str,
+        tool: dict[str, Optional[dict[str, Any]]],
     ) -> Optional[Pylint]:
         """Creates node of Pylint."""
         config = tool.get(Pylint.NAME)

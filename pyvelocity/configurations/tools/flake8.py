@@ -1,13 +1,12 @@
 """Implements Flake8 configurations."""
+
 from typing import Optional
 
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
-from pyvelocity.configurations.files.sections import (
-    ConfigurationFileParameter,
-    flake8,
-    is_not_none_value,
-    WhereToolDefault,
-)
+from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import WhereToolDefault
+from pyvelocity.configurations.files.sections import flake8
+from pyvelocity.configurations.files.sections import is_not_none_value
 from pyvelocity.configurations.tools import Tool
 
 
@@ -18,7 +17,9 @@ class Flake8(Tool):
 
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.max_line_length = ConfigurationFileParameter(
-            WhereToolDefault(self), ConfigurationFileParameter.NAME_TOOL_DEFAULT, 79
+            WhereToolDefault(self),
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            79,
         )
         if configuration_files.setup_cfg:
             self.overwrite(configuration_files.setup_cfg.flake8)

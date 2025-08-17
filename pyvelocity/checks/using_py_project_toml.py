@@ -1,5 +1,7 @@
 """Implements using pyproject.toml check."""
-from pyvelocity.checks import Check, Result
+
+from pyvelocity.checks import Check
+from pyvelocity.checks import Result
 
 
 class UsingPyProjectToml(Check):

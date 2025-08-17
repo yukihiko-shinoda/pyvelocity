@@ -3,7 +3,8 @@
 import click
 from click import ClickException
 
-from pyvelocity.checks.aggregation import Checks, Results
+from pyvelocity.checks.aggregation import Checks
+from pyvelocity.checks.aggregation import Results
 from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 

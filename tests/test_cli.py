@@ -1,10 +1,12 @@
 """Tests for `pyvelocity` package."""
+
 # Reason: Accept risk of using subprocess.
 import os
-from subprocess import PIPE, run  # nosec B404
+from subprocess import PIPE  # nosec B404
+from subprocess import run  # nosec B404
 
-from click.testing import CliRunner
 import pytest
+from click.testing import CliRunner
 
 from pyvelocity import cli
 

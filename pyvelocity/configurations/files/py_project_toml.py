@@ -1,4 +1,5 @@
 """Implements pyproject.toml."""
+
 from pathlib import Path
 
 import tomli

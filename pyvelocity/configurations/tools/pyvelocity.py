@@ -1,24 +1,25 @@
 """Implements pyvelocity configurations."""
+
 from typing import Optional
 
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
-from pyvelocity.configurations.files.sections import (
-    ConfigurationFileParameter,
-    is_not_none_value,
-    pyvelocity,
-    WhereToolDefault,
-)
+from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import WhereToolDefault
+from pyvelocity.configurations.files.sections import is_not_none_value
+from pyvelocity.configurations.files.sections import pyvelocity
 from pyvelocity.configurations.tools import Tool
 
 
 class Pyvelocity(Tool):
-    """pyvelocity configurations."""
+    """Pyvelocity configurations."""
 
     NAME = "pyvelocity"
 
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.filter: ConfigurationFileParameter[list[str]] = ConfigurationFileParameter(
-            WhereToolDefault(self), ConfigurationFileParameter.NAME_TOOL_DEFAULT, []
+            WhereToolDefault(self),
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            [],
         )
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.pyvelocity)

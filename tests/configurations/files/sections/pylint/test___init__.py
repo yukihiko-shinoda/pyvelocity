@@ -1,17 +1,18 @@
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+from typing import Optional
 
 import pytest
 
-from pyvelocity.configurations.files.py_project_toml import PyProjectToml, WHERE_PY_PROJECT_TOML
-from pyvelocity.configurations.files.sections.pylint import (
-    Format,
-    Pylint,
-    PyProjectTomlPylintFactory,
-    SetupCfgPylintFactory,
-)
-from pyvelocity.configurations.files.setup_cfg import SetupCfg, WHERE_SETUP_CFG
+from pyvelocity.configurations.files.py_project_toml import WHERE_PY_PROJECT_TOML
+from pyvelocity.configurations.files.py_project_toml import PyProjectToml
+from pyvelocity.configurations.files.sections.pylint import Format
+from pyvelocity.configurations.files.sections.pylint import Pylint
+from pyvelocity.configurations.files.sections.pylint import PyProjectTomlPylintFactory
+from pyvelocity.configurations.files.sections.pylint import SetupCfgPylintFactory
+from pyvelocity.configurations.files.setup_cfg import WHERE_SETUP_CFG
+from pyvelocity.configurations.files.setup_cfg import SetupCfg
 
 
 class TestPyProjectTomlPylintFactory:

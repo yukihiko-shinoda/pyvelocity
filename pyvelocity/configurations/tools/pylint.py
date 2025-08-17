@@ -1,13 +1,12 @@
 """Implements Pylint configurations."""
+
 from typing import Optional
 
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
-from pyvelocity.configurations.files.sections import (
-    ConfigurationFileParameter,
-    is_not_none_value,
-    pylint,
-    WhereToolDefault,
-)
+from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import WhereToolDefault
+from pyvelocity.configurations.files.sections import is_not_none_value
+from pyvelocity.configurations.files.sections import pylint
 from pyvelocity.configurations.tools import Tool
 
 
@@ -18,7 +17,9 @@ class Format(Tool):
 
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.max_line_length = ConfigurationFileParameter(
-            WhereToolDefault(self), ConfigurationFileParameter.NAME_TOOL_DEFAULT, 100
+            WhereToolDefault(self),
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            100,
         )
         if configuration_files.setup_cfg and configuration_files.setup_cfg.pylint:
             self.overwrite(configuration_files.setup_cfg.pylint.format)
