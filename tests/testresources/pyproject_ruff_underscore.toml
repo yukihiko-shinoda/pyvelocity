@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="pyvelocity"
+version="0.1.0"
+
+[tool.ruff]
+line_length = 100
