@@ -22,7 +22,7 @@ class PyProjectToml(ConfigurationFile):
 
     def __init__(self, path_py_project_toml: Path) -> None:
         super().__init__()
-        parsed_toml = tomli.loads(path_py_project_toml.read_text())
+        parsed_toml = tomli.loads(path_py_project_toml.read_text(encoding="utf-8"))
         node_tool = "tool"
         tool = parsed_toml[node_tool]
         self.black = PyProjectTomlSectionFactory.create(self, node_tool, Black, tool)
