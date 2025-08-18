@@ -1,10 +1,11 @@
 """Tests for `pyvelocity` package."""
-# Reason: Accept risk of using subprocess.
-import os
-from subprocess import PIPE, run  # nosec B404
 
-from click.testing import CliRunner
+# Reason: Accept risk of using subprocess.
+from subprocess import CalledProcessError  # nosec B404
+from subprocess import run  # nosec B404
+
 import pytest
+from click.testing import CliRunner
 
 from pyvelocity import cli
 
@@ -27,13 +28,24 @@ def test_echo_success_in_subprocess() -> None:
       https://gist.github.com/NodeJSmith/e7e37f2d3f162456869f015f842bcf15
     """
     # Reason: Accept risk of using subprocess.
-    completed_process = run("pyvelocity", check=True, stdout=PIPE, stderr=PIPE)  # nosec B603 B607
-    expected = ["Looks high velocity! ⚡️ 🚄 ✨\n", f"Looks high velocity!{os.linesep}"]
-    assert completed_process.stdout.decode("utf-8") in expected
+    try:
+        completed_process = run(  # nosec B603 B607
+            "pyvelocity",  # noqa: S607
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+    except CalledProcessError as exc:
+        pytest.fail(
+            f"Command: {exc.cmd} failed with exit code ({exc.returncode}): {exc.output}{exc.stderr}",
+        )
+    expected = ["Looks high velocity! ⚡️ 🚄 ✨\n", "Looks high velocity!\n"]
+    assert completed_process.stdout in expected
 
 
 @pytest.mark.parametrize(
-    "files, expect_exit_code, expect_message",
+    ("files", "expect_exit_code", "expect_message"),
     [
         (["pyproject_success.toml", "setup_success.cfg"], 0, "Looks high velocity! ⚡️ 🚄 ✨\n"),
         (
@@ -41,9 +53,10 @@ def test_echo_success_in_subprocess() -> None:
             3,
             (
                 "Line length are not consistent.\n"
-                "\tMost common = 120\n"
-                "\tpyproject.toml tool.docformatter wrap-summaries = 119\n"
-                "\tsetup.cfg flake8 max-line-length = 119\n"
+                "\tMost common = 119\n"
+                "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
+                "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
+                "\tpyproject.toml tool.ruff line-length = 118\n"
                 "Error: Looks there are some of improvements.\n"
             ),
         ),

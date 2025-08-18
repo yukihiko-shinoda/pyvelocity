@@ -7,8 +7,8 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"docker-compose.yml"
+		"../compose.yml",
+		"compose.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -35,29 +35,54 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"anthropic.claude-code",
+				"GitHub.copilot",
+				"streetsidesoftware.code-spell-checker",
+				"tamasfe.even-better-toml",
+				"charliermarsh.ruff",
 				"ms-python.python",
-				"bungcip.better-toml",
-				"streetsidesoftware.code-spell-checker"
+				"ms-python.flake8",
+				"ms-python.mypy-type-checker",
+				"ms-python.pylint",
+				"pycqa.bandit-pycqa",
+				"emeraldwalk.RunOnSave"
 			],
+			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"python.formatting.provider": "black",
-				"python.linting.enabled": true,
-				"python.linting.lintOnSave": true,
-				"python.linting.banditEnabled": true,
-				"python.linting.flake8Enabled": true,
-				"python.linting.mypyEnabled": true,
-				"python.linting.pydocstyleEnabled": true,
-				// VS Code displays Pylint warning: import-error that not reported in Pylint by executing CLI.
-				// "python.linting.pylintEnabled": true,
 				// This setting forcibly generate __pycache__.
 				// "python.testing.pytestEnabled": true,
 				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"editor.codeActionsOnSave": {
+						"source.fixAll": "explicit",
+						"source.organizeImports": "explicit"
+					},
 					"editor.formatOnSave": true
-				}
+				},
+				"bandit.args": [
+					"--configfile",
+					"pyproject.toml"
+				],
+				"cSpell.customDictionaries": {
+					"project-words": {
+					"name": "project-words",
+					"path": "${workspaceRoot}/project-words.txt",
+					"description": "Words used in this project",
+					"addWords": true
+					}
+				},
+				"emeraldwalk.runonsave": {
+					"commands": [
+						{
+							"match": ".*\\.py",
+							"cmd": "uv run docformatter --in-place ${file}"
+						}
+					]
+				},
+				"python.analysis.typeCheckingMode": "strict"
 			}
 		}
 	}
-
 	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
 }

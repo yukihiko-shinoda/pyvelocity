@@ -1,3 +1,5 @@
+"""Tests for pylint tool configuration."""
+
 import pytest
 
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles

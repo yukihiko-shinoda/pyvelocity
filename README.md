@@ -2,8 +2,8 @@
 
 [![Test](https://github.com/yukihiko-shinoda/pyvelocity/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ATest)
 [![CodeQL](https://github.com/yukihiko-shinoda/pyvelocity/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ACodeQL)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ea0afb1a762fc68d9c27/test_coverage)](https://codeclimate.com/github/yukihiko-shinoda/pyvelocity/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ea0afb1a762fc68d9c27/maintainability)](https://codeclimate.com/github/yukihiko-shinoda/pyvelocity/maintainability)
+[![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity)
+[![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity)
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/yukihiko-shinoda/pyvelocity)](https://codeclimate.com/github/yukihiko-shinoda/pyvelocity)
 [![Python versions](https://img.shields.io/pypi/pyversions/pyvelocity.svg)](https://pypi.org/project/pyvelocity)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fpyvelocity)](http://twitter.com/share?text=PyVelocity&url=https://pypi.org/project/pyvelocity/&hashtags=python)

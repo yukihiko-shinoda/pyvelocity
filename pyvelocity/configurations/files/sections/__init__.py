@@ -1,11 +1,19 @@
 """Implements configuration file sections."""
-from abc import ABC
-from dataclasses import dataclass
-import sys
-from typing import ClassVar, Generic, Optional, TypeVar
 
-from pyvelocity.configurations.files import ConfigurationFile
-from pyvelocity.configurations.tools import Tool
+from __future__ import annotations
+
+import sys
+from abc import ABC
+from abc import abstractmethod
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+from typing import ClassVar
+from typing import Generic
+from typing import TypeVar
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files import ConfigurationFile
+    from pyvelocity.configurations.tools import Tool
 
 if sys.version_info >= (3, 10):
     from typing import TypeGuard
@@ -22,7 +30,9 @@ class Section(ABC):
 
 @dataclass
 class Where(ABC):
-    pass
+    @abstractmethod
+    def __str__(self) -> str:
+        raise NotImplementedError
 
 
 @dataclass
@@ -31,7 +41,7 @@ class WhereFile(Where):
 
     file: ConfigurationFile
     section: type[Section]
-    node: Optional[str]
+    node: str | None
 
     def __str__(self) -> str:
         if self.node:
@@ -64,7 +74,7 @@ class ConfigurationFileParameter(Generic[T]):
         return f"{self.where} {self.name}"
 
 
-def is_not_none_value(instance: ConfigurationFileParameter[Optional[T]]) -> TypeGuard[ConfigurationFileParameter[T]]:
+def is_not_none_value(instance: ConfigurationFileParameter[T | None]) -> TypeGuard[ConfigurationFileParameter[T]]:
     """This function can't be implemented as instance method.
 
     Since TypeGuard does not narrow types of self or cls implicit arguments.
