@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 class Parameter:
+    """Configuration parameter wrapper."""
+
     def __init__(self, parameter: ConfigurationFileParameter[int]) -> None:
         self.parameter = parameter
 
@@ -29,6 +31,8 @@ class Parameter:
 
 
 class Flake8Parameter(Parameter):
+    """Flake8 specific parameter with B950 calculation."""
+
     @property
     def value(self) -> int:
         return self.calculate_bugbear_b950_detection()
@@ -42,6 +46,8 @@ class Flake8Parameter(Parameter):
 
 
 class ParameterFactory:
+    """Factory for creating parameter instances."""
+
     @classmethod
     def create(cls, configuration: ConfigurationFileParameter[int]) -> Parameter:
         if cls.is_flake8(configuration):
@@ -55,6 +61,8 @@ class ParameterFactory:
 
 
 class Error:
+    """Line length consistency error."""
+
     def __init__(
         self,
         most_common: tuple[Any | None, int],
