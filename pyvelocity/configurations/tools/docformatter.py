@@ -28,12 +28,12 @@ class Docformatter(Tool):
         where_tool_default = WhereToolDefault(self)
         self.wrap_descriptions = ConfigurationFileParameter(
             where_tool_default,
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " wrap descriptions",
             72,
         )
         self.wrap_summaries = ConfigurationFileParameter(
             where_tool_default,
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " wrap summaries",
             79,
         )
         if configuration_files.setup_cfg:

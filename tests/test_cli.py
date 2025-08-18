@@ -14,7 +14,6 @@ def test_echo_success() -> None:
     cli.echo_success()
 
 
-@pytest.mark.skip("Since best practice is changed")
 def test_echo_success_in_subprocess() -> None:
     """Function echo_success() should fallback to no emoji.
 
@@ -43,9 +42,10 @@ def test_echo_success_in_subprocess() -> None:
             3,
             (
                 "Line length are not consistent.\n"
-                "\tMost common = 120\n"
-                "\tpyproject.toml tool.docformatter wrap-summaries = 119\n"
-                "\tsetup.cfg flake8 max-line-length = 119\n"
+                "\tMost common = 119\n"
+                "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
+                "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
+                "\tpyproject.toml tool.ruff line-length = 118\n"
                 "Error: Looks there are some of improvements.\n"
             ),
         ),

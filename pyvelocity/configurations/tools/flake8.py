@@ -22,11 +22,13 @@ class Flake8(Tool):
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.max_line_length = ConfigurationFileParameter(
             WhereToolDefault(self),
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " max-line-length",
             79,
         )
         if configuration_files.setup_cfg:
             self.overwrite(configuration_files.setup_cfg.flake8)
+        if configuration_files.py_project_toml:
+            self.overwrite(configuration_files.py_project_toml.flake8)
 
     def overwrite(self, section_flake8: flake8.Flake8 | None) -> None:
         if section_flake8 and is_not_none_value(section_flake8.max_line_length):

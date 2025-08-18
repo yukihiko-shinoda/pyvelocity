@@ -51,6 +51,19 @@ class SectionFactory(Generic[TypeVarSection]):
         )
 
 
+class SectionFactoryForPyProjectToml(SectionFactory[TypeVarSection]):
+    def create_configuration_parameter(self, parameter_name: str) -> ConfigurationFileParameter[str | None]:
+        try:
+            parameter: str | None = self.config[parameter_name]
+        except KeyError:
+            parameter = self.config.get(parameter_name.replace("-", "_"))
+        return ConfigurationFileParameter(
+            WhereFile(self.configuration_file, self.class_section, self.node),
+            parameter_name,
+            parameter,
+        )
+
+
 class PyProjectTomlSectionFactory:
     """Factory for Section instance for PyProjectToml."""
 
@@ -66,7 +79,7 @@ class PyProjectTomlSectionFactory:
         config = tool.get(class_configuration.NAME)
         if not config:
             return None
-        return SectionFactory(py_project_toml, node, class_configuration, config).create_section()
+        return SectionFactoryForPyProjectToml(py_project_toml, node, class_configuration, config).create_section()
 
 
 class SetupCfgSectionFactory:

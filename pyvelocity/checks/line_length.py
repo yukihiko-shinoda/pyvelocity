@@ -8,9 +8,66 @@ from typing import Any
 
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
+from pyvelocity.configurations.files.sections.flake8 import Flake8 as SectionFlake8
+from pyvelocity.configurations.tools.flake8 import Flake8 as ToolFlake8
 
 if TYPE_CHECKING:
     from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+
+
+class Parameter:
+    def __init__(self, parameter: ConfigurationFileParameter[int]) -> None:
+        self.parameter = parameter
+
+    @property
+    def value(self) -> int:
+        return self.parameter.value
+
+    @property
+    def message(self) -> str:
+        return f"{self.parameter.full_name} = {self.parameter.value!s}"
+
+
+class Flake8Parameter(Parameter):
+    @property
+    def value(self) -> int:
+        return self.calculate_bugbear_b950_detection()
+
+    def calculate_bugbear_b950_detection(self) -> int:
+        return round(self.parameter.value * 1.1)
+
+    @property
+    def message(self) -> str:
+        return super().message + f" (B950 in flake8-bugbear detects: {self.value!s})"
+
+
+class ParameterFactory:
+    @classmethod
+    def create(cls, configuration: ConfigurationFileParameter[int]) -> Parameter:
+        if cls.is_flake8(configuration):
+            return Flake8Parameter(configuration)
+        return Parameter(configuration)
+
+    @staticmethod
+    def is_flake8(configuration: ConfigurationFileParameter[int]) -> bool:
+        where_string = str(configuration.where)
+        return SectionFlake8.NAME in where_string or ToolFlake8.NAME in where_string
+
+
+class Error:
+    def __init__(
+        self,
+        most_common: tuple[Any | None, int],
+        parameters: list[Parameter],
+    ) -> None:
+        self.most_common = most_common
+        self.parameters = parameters
+
+    def build_message(self) -> str:
+        """Builds message."""
+        parameters = (param for param in self.parameters if param.value != self.most_common[0])
+        messages = [param.message for param in parameters]
+        return f"Line length are not consistent.\n\tMost common = {self.most_common[0]}\n\t" + "\n\t".join(messages)
 
 
 class LineLength(Check):
@@ -19,30 +76,17 @@ class LineLength(Check):
     ID = "line-length"
 
     def execute(self) -> Result:
-        target_configurations: list[ConfigurationFileParameter[int]] = []
-        target_configurations = [
+        target_parameters: list[ConfigurationFileParameter[int]] = []
+        target_parameters = [
             self.configurations.docformatter.wrap_descriptions,
             self.configurations.docformatter.wrap_summaries,
-            self.configurations.isort.line_length,
-            self.configurations.black.line_length,
             self.configurations.flake8.max_line_length,
             self.configurations.pylint.format.max_line_length,
+            self.configurations.ruff.line_length,
         ]
-        counter = Counter([target_configuration.value for target_configuration in target_configurations])
+        parameters = [ParameterFactory.create(parameter) for parameter in target_parameters]
+        counter = Counter(parameter.value for parameter in parameters)
         most_common = counter.most_common()[0]
-        is_ok = most_common[1] == len(target_configurations)
-        message = "" if is_ok else (self.build_message(most_common, target_configurations))
+        is_ok = most_common[1] == len(target_parameters)
+        message = "" if is_ok else (Error(most_common, parameters).build_message())
         return Result(self.ID, is_ok, message)
-
-    @staticmethod
-    def build_message(
-        most_common: tuple[Any | None, int],
-        target_configurations: list[ConfigurationFileParameter[int]],
-    ) -> str:
-        """Builds message."""
-        error_messages = [
-            f"{target_configuration.full_name} = {target_configuration.value!s}"
-            for target_configuration in target_configurations
-            if target_configuration.value != most_common[0]
-        ]
-        return f"Line length are not consistent.\n\tMost common = {most_common[0]}\n\t" + "\n\t".join(error_messages)

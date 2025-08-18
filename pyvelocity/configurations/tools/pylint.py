@@ -22,7 +22,7 @@ class Format(Tool):
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.max_line_length = ConfigurationFileParameter(
             WhereToolDefault(self),
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " max-line-length",
             100,
         )
         if configuration_files.setup_cfg and configuration_files.setup_cfg.pylint:

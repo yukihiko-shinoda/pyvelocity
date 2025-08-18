@@ -22,7 +22,7 @@ class Black(Tool):
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.line_length = ConfigurationFileParameter(
             WhereToolDefault(self),
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " line length",
             88,
         )
         if configuration_files.py_project_toml:

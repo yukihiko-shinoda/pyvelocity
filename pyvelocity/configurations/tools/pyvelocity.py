@@ -22,7 +22,7 @@ class Pyvelocity(Tool):
     def __init__(self, configuration_files: ConfigurationFiles) -> None:
         self.filter: ConfigurationFileParameter[list[str]] = ConfigurationFileParameter(
             WhereToolDefault(self),
-            ConfigurationFileParameter.NAME_TOOL_DEFAULT,
+            ConfigurationFileParameter.NAME_TOOL_DEFAULT + " filter",
             [],
         )
         if configuration_files.py_project_toml:

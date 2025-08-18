@@ -7,6 +7,7 @@ from pyvelocity.configurations.tools.flake8 import Flake8
 from pyvelocity.configurations.tools.isort import Isort
 from pyvelocity.configurations.tools.pylint import Pylint
 from pyvelocity.configurations.tools.pyvelocity import Pyvelocity
+from pyvelocity.configurations.tools.ruff import Ruff
 
 
 # Reason: Aggregation class. pylint: disable=too-few-public-methods
@@ -20,3 +21,4 @@ class Configurations:
         self.isort = Isort(configuration_files)
         self.pylint = Pylint(configuration_files)
         self.pyvelocity = Pyvelocity(configuration_files)
+        self.ruff = Ruff(configuration_files)
