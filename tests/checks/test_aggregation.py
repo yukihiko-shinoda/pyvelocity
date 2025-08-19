@@ -52,6 +52,7 @@ class TestChecks:
             "\tdocformatter tool default wrap summaries = 79\n"
             "\tFlake8 tool default max-line-length = 79 (B950 in flake8-bugbear detects: 87)\n"
             "\tPylint tool default max-line-length = 100\n"
-            "\tRuff tool default line-length = 88"
+            "\tRuff tool default line-length = 88\n"
+            "pyproject.toml is required for readme check"
         )
         assert results.is_ok is False

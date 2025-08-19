@@ -71,7 +71,7 @@ class PyProjectTomlSectionFactory:
     def create(
         cls,
         py_project_toml: PyProjectToml,
-        node: str,
+        node: str | None,
         class_configuration: type[TypeVarSection],
         tool: dict[str, dict[str, Any] | None],
     ) -> TypeVarSection | None:
