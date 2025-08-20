@@ -24,7 +24,8 @@ class TestChecks:
                     "\tMost common = 119\n"
                     "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
                     "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
-                    "\tpyproject.toml tool.ruff line-length = 118"
+                    "\tpyproject.toml tool.ruff line-length = 118\n"
+                    "classifiers should include 'Programming Language :: Python :: 3.13' in [project] section of pyproject.toml"
                 ),
                 False,
             ),
@@ -53,6 +54,8 @@ class TestChecks:
             "\tFlake8 tool default max-line-length = 79 (B950 in flake8-bugbear detects: 87)\n"
             "\tPylint tool default max-line-length = 100\n"
             "\tRuff tool default line-length = 88\n"
-            "pyproject.toml is required for readme check"
+            "pyproject.toml is required for readme check\n"
+            "pyproject.toml is required for requires-python check\n"
+            "pyproject.toml is required for classifiers check"
         )
         assert results.is_ok is False

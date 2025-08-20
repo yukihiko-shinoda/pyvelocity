@@ -57,6 +57,7 @@ def test_echo_success_in_subprocess() -> None:
                 "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
                 "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
                 "\tpyproject.toml tool.ruff line-length = 118\n"
+                "classifiers should include 'Programming Language :: Python :: 3.13' in [project] section of pyproject.toml\n"
                 "Error: Looks there are some of improvements.\n"
             ),
         ),
