@@ -43,46 +43,52 @@ class RequiresPython(Check):
 
     def supports_latest_python(self, requires_python: str) -> bool:
         """Check if the requires-python specification supports the latest Python version."""
-        """
-        Handle common patterns:
-        ">=3.8" -> check if 3.13 >= 3.8
-        ">=3.8,<4.0" -> check if 3.13 is in range
-        "~=3.8" -> compatible release (3.8.x)
-        """
-
-        # Extract version components
         latest_major, latest_minor = map(int, LATEST_PYTHON_VERSION.split("."))
 
-        # Handle >= version requirements
         if ">=" in requires_python:
-            # Extract the minimum version from patterns like ">=3.8" or ">=3.8,<4.0"
-            ge_match = re.search(r">=(\d+)\.(\d+)", requires_python)
-            if ge_match:
-                min_major, min_minor = map(int, ge_match.groups())
-
-                # Check if latest version meets minimum requirement
-                if (latest_major, latest_minor) >= (min_major, min_minor):
-                    # Check for upper bound constraints
-                    if "<" in requires_python:
-                        lt_match = re.search(r"<(\d+)\.(\d+)", requires_python)
-                        if lt_match:
-                            max_major, max_minor = map(int, lt_match.groups())
-                            return (latest_major, latest_minor) < (max_major, max_minor)
-                    return True
-
-        # Handle ~= compatible release
+            return self._check_greater_equal_support(latest_major, latest_minor, requires_python)
         if "~=" in requires_python:
-            compat_match = re.search(r"~=(\d+)\.(\d+)", requires_python)
-            if compat_match:
-                compat_major, compat_minor = map(int, compat_match.groups())
-                # Compatible release means same major.minor version family
-                # ~=3.12 allows 3.12.x but not 3.13.x
-                return latest_major == compat_major and latest_minor == compat_minor
+            return self._check_compatible_release_support(latest_major, latest_minor, requires_python)
+        return self._check_exact_version_support(latest_major, latest_minor, requires_python)
 
-        # Handle exact version specifications
+    def _check_greater_equal_support(self, latest_major: int, latest_minor: int, requires_python: str) -> bool:
+        """Check if latest Python version satisfies >= requirement with optional upper bound."""
+        ge_match = re.search(r">=(\d+)\.(\d+)", requires_python)
+        if not ge_match:
+            return False
+
+        min_major, min_minor = map(int, ge_match.groups())
+        if (latest_major, latest_minor) < (min_major, min_minor):
+            return False
+
+        return self._check_upper_bound_support(latest_major, latest_minor, requires_python)
+
+    def _check_upper_bound_support(self, latest_major: int, latest_minor: int, requires_python: str) -> bool:
+        """Check if latest Python version is within upper bound constraint."""
+        if "<" not in requires_python:
+            return True
+
+        lt_match = re.search(r"<(\d+)\.(\d+)", requires_python)
+        if not lt_match:
+            return True
+
+        max_major, max_minor = map(int, lt_match.groups())
+        return (latest_major, latest_minor) < (max_major, max_minor)
+
+    def _check_compatible_release_support(self, latest_major: int, latest_minor: int, requires_python: str) -> bool:
+        """Check if latest Python version satisfies ~= compatible release requirement."""
+        compat_match = re.search(r"~=(\d+)\.(\d+)", requires_python)
+        if not compat_match:
+            return False
+
+        compat_major, compat_minor = map(int, compat_match.groups())
+        return latest_major == compat_major and latest_minor == compat_minor
+
+    def _check_exact_version_support(self, latest_major: int, latest_minor: int, requires_python: str) -> bool:
+        """Check if latest Python version matches exact version requirement."""
         exact_match = re.search(r"^(\d+)\.(\d+)$", requires_python.strip())
-        if exact_match:
-            req_major, req_minor = map(int, exact_match.groups())
-            return (latest_major, latest_minor) == (req_major, req_minor)
+        if not exact_match:
+            return False
 
-        return False
+        req_major, req_minor = map(int, exact_match.groups())
+        return (latest_major, latest_minor) == (req_major, req_minor)
