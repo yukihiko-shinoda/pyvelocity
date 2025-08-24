@@ -65,20 +65,28 @@ class TestRequiresPythonVersionLogic:
     """Test version parsing logic for RequiresPython."""
 
     @staticmethod
-    def test_supports_latest_python_various_formats() -> None:
-        """Test _supports_latest_python with various version formats."""
+    @pytest.mark.parametrize(
+        ("requires_python_spec", "expected_supports_latest"),
+        [
+            # Should support 3.13
+            (">=3.8", True),
+            (">=3.13", True),
+            (">=3.8,<4.0", True),
+            ("~=3.13", True),
+            ("3.13", True),
+            # Should not support 3.13
+            (">=3.14", False),
+            (">=3.8,<3.13", False),
+            ("~=3.12", False),
+            ("3.12", False),
+            ("invalid", False),
+        ],
+    )
+    def test_supports_latest_python_various_formats(
+        requires_python_spec: str,
+        *,
+        expected_supports_latest: bool,
+    ) -> None:
+        """Test supports_latest_python with various version formats."""
         requires_python_check = RequiresPython(None, None)  # type: ignore[arg-type]
-
-        # Should support 3.13
-        assert requires_python_check.supports_latest_python(">=3.8")
-        assert requires_python_check.supports_latest_python(">=3.13")
-        assert requires_python_check.supports_latest_python(">=3.8,<4.0")
-        assert requires_python_check.supports_latest_python("~=3.13")
-        assert requires_python_check.supports_latest_python("3.13")
-
-        # Should not support 3.13
-        assert not requires_python_check.supports_latest_python(">=3.14")
-        assert not requires_python_check.supports_latest_python(">=3.8,<3.13")
-        assert not requires_python_check.supports_latest_python("~=3.12")
-        assert not requires_python_check.supports_latest_python("3.12")
-        assert not requires_python_check.supports_latest_python("invalid")
+        assert requires_python_check.supports_latest_python(requires_python_spec) is expected_supports_latest
