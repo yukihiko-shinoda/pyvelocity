@@ -57,7 +57,11 @@ def test_echo_success_in_subprocess() -> None:
                 "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
                 "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
                 "\tpyproject.toml tool.ruff line-length = 118\n"
-                "Python version classifiers don't match requires-python '>=3.5': missing classifiers: Programming Language :: Python :: 3.10, Programming Language :: Python :: 3.11, Programming Language :: Python :: 3.12, Programming Language :: Python :: 3.13\n"
+                "Python version classifiers don't match requires-python '>=3.5': missing classifiers: "
+                "Programming Language :: Python :: 3.10, "
+                "Programming Language :: Python :: 3.11, "
+                "Programming Language :: Python :: 3.12, "
+                "Programming Language :: Python :: 3.13\n"
                 "Error: Looks there are some of improvements.\n"
             ),
         ),

@@ -135,6 +135,8 @@ class RequiresPythonAnalyzer:
 
 @dataclass
 class Project(Section):
+    """Represents the [project] section in pyproject.toml configuration files."""
+
     NAME: ClassVar[str] = "project"
     LIST_PARAMETER_NAME: ClassVar[list[str]] = ["readme", "requires-python", "classifiers"]
     readme: ConfigurationFileParameter[str | None]

@@ -45,8 +45,9 @@ class Classifiers(Check):
         return self.compare_classifiers_with_requires_python(project, classifiers_value)
 
     def compare_classifiers_with_requires_python(self, project: Project, classifiers_value: list[str]) -> Result:
+        """Compare classifiers against requires-python to ensure consistency."""
         requires_python_value = project.requires_python.value
-        if requires_python_value is None:
+        if requires_python_value is None:  # pylint: disable=duplicate-code
             return Result(
                 self.ID,
                 is_ok=False,
@@ -58,7 +59,9 @@ class Classifiers(Check):
             return Result(
                 self.ID,
                 is_ok=False,
-                message=f"Could not parse requires-python '{requires_python_value}' in [project] section of pyproject.toml",
+                message=(
+                    f"Could not parse requires-python '{requires_python_value}' in [project] section of pyproject.toml"
+                ),
             )
 
         classifier_versions = self.get_classifier_python_versions(classifiers_value)
@@ -78,7 +81,10 @@ class Classifiers(Check):
             return Result(self.ID, is_ok=True, message="")
 
         error_parts = self._build_error_message_parts(missing_versions, extra_versions)
-        message = f"Python version classifiers don't match requires-python '{requires_python_value}': {'; '.join(error_parts)}"
+        message = (
+            "Python version classifiers don't match requires-python "
+            f"'{requires_python_value}': {'; '.join(error_parts)}"
+        )
         return Result(self.ID, is_ok=False, message=message)
 
     def _build_error_message_parts(self, missing_versions: set[str], extra_versions: set[str]) -> list[str]:

@@ -27,7 +27,10 @@ class TestRequiresPython:
             ),
             (
                 ["pyproject_python_old_requires.toml", "setup_success.cfg"],
-                'requires-python should support Python 3.13, but found ">=3.14" in [project] section of pyproject.toml',
+                (
+                    "requires-python should support Python 3.13, "
+                    'but found ">=3.14" in [project] section of pyproject.toml'
+                ),
                 False,
             ),
             (
