@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="pyvelocity"
+version="0.1.0"
+description = "Checks code and settings and ls up advises in point of velocity."
+readme = "README.md"
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[tool.docformatter]
+recursive = true
+wrap-descriptions = 119
+wrap-summaries = 119
+
+[tool.isort]
+line_length = 119
+
+[tool.black]
+line-length = 119
+
+[tool.pylint.format]
+max-line-length = 119
