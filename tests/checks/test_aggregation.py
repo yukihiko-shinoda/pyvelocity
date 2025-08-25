@@ -60,6 +60,7 @@ class TestChecks:
             "\tRuff tool default line-length = 88\n"
             "pyproject.toml is required for readme check\n"
             "pyproject.toml is required for requires-python check\n"
-            "pyproject.toml is required for classifiers check"
+            "pyproject.toml is required for classifiers check\n"
+            "pyproject.toml is required for zip-safe-false check"
         )
         assert results.is_ok is False

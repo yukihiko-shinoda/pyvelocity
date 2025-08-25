@@ -14,6 +14,7 @@ from pyvelocity.configurations.files.sections.project import Project
 from pyvelocity.configurations.files.sections.pylint import PyProjectTomlPylintFactory
 from pyvelocity.configurations.files.sections.pyvelocity import Pyvelocity
 from pyvelocity.configurations.files.sections.ruff import Ruff
+from pyvelocity.configurations.files.sections.setuptools import Setuptools
 
 WHERE_PY_PROJECT_TOML = "pyproject.toml"
 
@@ -34,6 +35,7 @@ class PyProjectToml(ConfigurationFile):
         self.pylint = PyProjectTomlPylintFactory.create(self, node_tool, tool)
         self.pyvelocity = PyProjectTomlSectionFactory.create(self, node_tool, Pyvelocity, tool)
         self.ruff = PyProjectTomlSectionFactory.create(self, node_tool, Ruff, tool)
+        self.setuptools = PyProjectTomlSectionFactory.create(self, node_tool, Setuptools, tool)
 
         # Project section is at root level, not under [tool]
         self.project = PyProjectTomlSectionFactory.create(self, None, Project, parsed_toml)

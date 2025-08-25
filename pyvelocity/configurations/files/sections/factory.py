@@ -77,7 +77,7 @@ class PyProjectTomlSectionFactory:
     ) -> TypeVarSection | None:
         """Creates Section instance for PyProjectToml."""
         config = tool.get(class_configuration.NAME)
-        if not config:
+        if config is None:
             return None
         return SectionFactoryForPyProjectToml(py_project_toml, node, class_configuration, config).create_section()
 
