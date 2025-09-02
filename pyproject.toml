@@ -64,6 +64,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "click>=7.0",
+  "packagediscovery>=0.2.0",
   "tomli",
   # To use TypeGuard
   # Following definition causes mypy error in development environment (Pipenv issue.)
