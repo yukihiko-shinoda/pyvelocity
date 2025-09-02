@@ -8,6 +8,7 @@ from pyvelocity.checks.classifiers import Classifiers
 from pyvelocity.checks.line_length import LineLength
 from pyvelocity.checks.readme import Readme
 from pyvelocity.checks.requires_python import RequiresPython
+from pyvelocity.checks.typed import Typed
 from pyvelocity.checks.using_py_project_toml import UsingPyProjectToml
 from pyvelocity.checks.zip_safe_false import ZipSafeFalse
 from pyvelocity.configurations.aggregation import Configurations
@@ -40,6 +41,7 @@ class Checks:
             RequiresPython,
             Classifiers,
             ZipSafeFalse,
+            Typed,
         ]
         self.checks = (
             check_class(configuration_files, configurations)

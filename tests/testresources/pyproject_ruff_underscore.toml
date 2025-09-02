@@ -8,3 +8,5 @@ version="0.1.0"
 
 [tool.ruff]
 line_length = 100
+[tool.pyvelocity]
+filter = ["typed"]
