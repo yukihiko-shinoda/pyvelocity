@@ -7,6 +7,7 @@ from unittest.mock import Mock
 import pytest
 
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
+from pyvelocity.configurations.files.sections import WhereToolDefault
 from pyvelocity.configurations.files.sections.project import Project
 from pyvelocity.configurations.files.sections.project import RequiresPythonAnalyzer
 
@@ -92,3 +93,89 @@ class TestProjectVersionLogic:
     def test_requires_python_minimum_version(project: Project, expected: str) -> None:
         """Test requires_python_minimum_version extraction."""
         assert project.requires_python_minimum_version() == expected
+
+
+class TestRequiresPythonAnalyzer:
+    """Test internal analyzer logic for edge cases."""
+
+    @staticmethod
+    def test_handle_equals_or_greater_than_no_match() -> None:
+        """Test handle_equals_or_greater_than when no match found (line 36)."""
+        analyzer = RequiresPythonAnalyzer("invalid-spec")
+        result = analyzer.handle_equals_or_greater_than()
+        assert result is None
+
+    @staticmethod
+    def test_handle_same_major_version_no_match() -> None:
+        """Test handle_same_major_version when no match found (line 43)."""
+        analyzer = RequiresPythonAnalyzer(">=3.8")
+        result = analyzer.handle_same_major_version()
+        assert result is None
+
+    @staticmethod
+    def test_handle_exact_version_specifications_no_match() -> None:
+        """Test handle_exact_version_specifications when no match found (line 56)."""
+        analyzer = RequiresPythonAnalyzer(">=3.8")
+        result = analyzer.handle_exact_version_specifications()
+        assert result is None
+
+    @staticmethod
+    def test_version_satisfies_requirement_no_ge_pattern() -> None:
+        """Test version_satisfies_requirement when >= path has no regex match (line 97)."""
+        analyzer = RequiresPythonAnalyzer("invalid")
+        # This triggers line 97: no >= match found in _check_greater_equal_requirement
+        result = analyzer.version_satisfies_requirement("3.9", "invalid-ge-spec")
+        assert result is False
+
+    @staticmethod
+    def test_version_satisfies_requirement_ge_triggers_97() -> None:
+        """Test version_satisfies_requirement with >= that has malformed version to trigger line 97."""
+        analyzer = RequiresPythonAnalyzer(">=3.8")
+        # This should trigger the >= path but with malformed requirement to hit line 97
+        result = analyzer.version_satisfies_requirement("3.9", ">=malformed")
+        assert result is False
+
+    @staticmethod
+    def test_version_satisfies_requirement_invalid_upper_bound() -> None:
+        """Test version_satisfies_requirement with invalid upper bound that triggers line 112."""
+        analyzer = RequiresPythonAnalyzer(">=3.8")
+        # This triggers line 112: < present but regex doesn't match in _check_upper_bound_constraint
+        result = analyzer.version_satisfies_requirement("3.9", ">=3.8,<invalid")
+        assert result is True  # Should return True because invalid < pattern is ignored
+
+    @staticmethod
+    def test_version_satisfies_requirement_no_compatible_release_match() -> None:
+        """Test version_satisfies_requirement when ~= path has no regex match (line 121)."""
+        analyzer = RequiresPythonAnalyzer("invalid")
+        # This triggers line 121: no ~= match found in _check_compatible_release_requirement
+        result = analyzer.version_satisfies_requirement("3.9", "invalid-compat-spec")
+        assert result is False
+
+    @staticmethod
+    def test_version_satisfies_requirement_tilde_triggers_121() -> None:
+        """Test version_satisfies_requirement with ~= that has malformed version to trigger line 121."""
+        analyzer = RequiresPythonAnalyzer("~=3.8")
+        # This should trigger the ~= path but with malformed requirement to hit line 121
+        result = analyzer.version_satisfies_requirement("3.9", "~=malformed")
+        assert result is False
+
+    @staticmethod
+    def test_version_satisfies_requirement_no_exact_version_match() -> None:
+        """Test version_satisfies_requirement when exact version path has no regex match (line 130)."""
+        analyzer = RequiresPythonAnalyzer("invalid")
+        # This triggers line 130: no exact version match found in _check_exact_version_requirement
+        result = analyzer.version_satisfies_requirement("3.9", "invalid-exact-spec")
+        assert result is False
+
+    @staticmethod
+    def test_get_requires_python_supported_versions_none_value() -> None:
+        """Test get_requires_python_supported_versions with None value (line 157)."""
+        project = Project(
+            configuration_file=Mock(),
+            readme=Mock(),
+            requires_python=ConfigurationFileParameter(WhereToolDefault(Mock()), "requires-python", None),
+            classifiers=Mock(),
+        )
+
+        result = project.get_requires_python_supported_versions(project)
+        assert result == set()

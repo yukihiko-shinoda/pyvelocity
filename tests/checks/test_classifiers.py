@@ -47,6 +47,16 @@ class TestClassifiers:
                 "Project section is missing in pyproject.toml",
                 False,
             ),
+            (
+                ["pyproject_classifier_non_list.toml", "setup_success.cfg"],
+                "classifiers field must be a list in [project] section of pyproject.toml",
+                False,
+            ),
+            (
+                ["pyproject_classifier_invalid_requires_python.toml", "setup_success.cfg"],
+                "Could not parse requires-python 'invalid-version' in [project] section of pyproject.toml",
+                False,
+            ),
         ],
     )
     def test_classifiers_check(expect_message: str, *, expect_is_ok: bool) -> None:

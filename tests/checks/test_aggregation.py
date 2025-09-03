@@ -61,6 +61,8 @@ class TestChecks:
             "pyproject.toml is required for readme check\n"
             "pyproject.toml is required for requires-python check\n"
             "pyproject.toml is required for classifiers check\n"
-            "pyproject.toml is required for zip-safe-false check"
+            "pyproject.toml is required for zip-safe-false check\n"
+            'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+            "Missing py.typed files in package directories"
         )
         assert results.is_ok is False

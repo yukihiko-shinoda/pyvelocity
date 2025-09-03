@@ -52,7 +52,12 @@ class SectionFactory(Generic[TypeVarSection]):
 
 
 class SectionFactoryForPyProjectToml(SectionFactory[TypeVarSection]):
-    def create_configuration_parameter(self, parameter_name: str) -> ConfigurationFileParameter[str | None]:
+    """Factory for Section instance for PyProjectToml."""
+
+    def create_configuration_parameter(
+        self,
+        parameter_name: str,
+    ) -> ConfigurationFileParameter[str | None]:
         try:
             parameter: str | None = self.config[parameter_name]
         except KeyError:

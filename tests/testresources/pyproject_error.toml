@@ -79,3 +79,6 @@ min-public-methods = "1"
 
 [tool.ruff]
 line-length = 118
+
+[tool.pyvelocity]
+filter = ["typed"]

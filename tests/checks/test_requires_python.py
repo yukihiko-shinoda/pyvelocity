@@ -90,3 +90,26 @@ class TestRequiresPythonVersionLogic:
         """Test supports_latest_python with various version formats."""
         requires_python_check = RequiresPython(None, None)  # type: ignore[arg-type]
         assert requires_python_check.supports_latest_python(requires_python_spec) is expected_supports_latest
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        ("requires_python_spec", "expected_supports_latest"),
+        [
+            # Test case triggering line 58: >= present but regex doesn't match in _check_greater_equal_support
+            (">=invalid", False),
+            # Test case triggering line 73: no < match found in _check_upper_bound_support
+            # Creates a spec with < but invalid format that doesn't match regex
+            (">=3.8,<invalid", True),
+            # Test case triggering line 82: ~= present but regex doesn't match in _check_compatible_release_support
+            ("~=invalid", False),
+        ],
+    )
+    def test_edge_cases_through_public_method(
+        requires_python_spec: str,
+        *,
+        expected_supports_latest: bool,
+    ) -> None:
+        """Test edge cases by calling public method that triggers protected method paths."""
+        requires_python_check = RequiresPython(None, None)  # type: ignore[arg-type]
+        result = requires_python_check.supports_latest_python(requires_python_spec)
+        assert result is expected_supports_latest

@@ -29,3 +29,5 @@ line-length = 119
 
 [tool.pylint.format]
 max-line-length = 119
+[tool.pyvelocity]
+filter = ["typed"]

@@ -83,5 +83,6 @@ min-public-methods = "1"
 
 [tool.pyvelocity]
 filter = [
-  "line-length"
+  "line-length",
+  "typed"
 ]

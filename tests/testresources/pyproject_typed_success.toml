@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 
 [tool.setuptools]
-# zip-safe is missing
-[tool.pyvelocity]
-filter = ["typed"]
+zip-safe = "false"
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
