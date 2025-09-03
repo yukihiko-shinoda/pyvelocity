@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="pyvelocity"
+version="0.1.0"
+description = "Test for no >= in requires-python"
+readme = "README.md"
+requires-python = "3.9"
+
+[tool.setuptools]
+zip-safe = false

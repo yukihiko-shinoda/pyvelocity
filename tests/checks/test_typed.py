@@ -50,6 +50,14 @@ class TestTyped:
                 "Missing py.typed files in package directories",
                 False,
             ),
+            # Non-dict package-data config
+            (
+                ["pyproject_typed_non_dict_package_data.toml", "setup_success.cfg"],
+                ["testpackage"],
+                ["testpackage/py.typed"],
+                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration',
+                False,
+            ),
             # Both config and files missing
             (
                 ["pyproject_typed_missing_package_data.toml", "setup_success.cfg"],
