@@ -63,6 +63,7 @@ class TestChecks:
             "pyproject.toml is required for classifiers check\n"
             "pyproject.toml is required for zip-safe-false check\n"
             'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-            "Missing py.typed files in package directories"
+            "Missing py.typed files in package directories\n"
+            'Missing "Typing :: Typed" classifier in pyproject.toml'
         )
         assert results.is_ok is False

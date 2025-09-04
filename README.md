@@ -61,6 +61,7 @@ Ensures proper type hint configuration for typed packages:
 
 - Validates that `tool.setuptools.package-data` includes `"*" = ["py.typed"]`
 - Checks for the presence of `py.typed` files in package directories
+- Requires the `"Typing :: Typed"` classifier in project metadata
 
 This check helps ensure your package properly declares itself as typed for better IDE support and type checking.
 
