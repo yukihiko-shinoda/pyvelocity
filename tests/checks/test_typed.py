@@ -15,6 +15,9 @@ from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 
 if TYPE_CHECKING:
     from pyvelocity.checks import Result
+    from tests.conftest import MockClassifiersField
+    from tests.conftest import MockProject
+    from tests.conftest import MockPyProjectToml
 
 
 class TestTyped:
@@ -160,29 +163,7 @@ class TestTyped:
 
 
 class TestTypingClassifierValidator:
-    """Test the TypingClassifierValidator class directly without mocks."""
-
-    class MockClassifiersField:
-        """Mock classifiers field that implements the protocol."""
-
-        def __init__(self, value: list[str] | str | None) -> None:
-            self.value = value
-
-    class MockProject:
-        """Mock project configuration that implements the protocol."""
-
-        def __init__(self, classifiers_value: list[str] | str | None) -> None:
-            self.classifiers = (
-                TestTypingClassifierValidator.MockClassifiersField(classifiers_value)
-                if classifiers_value is not None
-                else None
-            )
-
-    class MockPyProjectToml:
-        """Mock pyproject.toml configuration that implements the protocol."""
-
-        def __init__(self, project: TestTypingClassifierValidator.MockProject | None) -> None:
-            self.project = project
+    """Test the TypingClassifierValidator class using pytest fixtures."""
 
     @staticmethod
     def test_no_pyproject_toml() -> None:
@@ -191,84 +172,74 @@ class TestTypingClassifierValidator:
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_no_project_section() -> None:
+    def test_no_project_section(mock_py_project_toml_no_project: MockPyProjectToml) -> None:
         """Test validator when project section is missing."""
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(None)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_no_project)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_no_classifiers_field() -> None:
+    def test_no_classifiers_field(mock_py_project_toml_no_classifiers: MockPyProjectToml) -> None:
         """Test validator when classifiers field is missing."""
-        project = TestTypingClassifierValidator.MockProject(None)
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_no_classifiers)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_classifiers_value_none() -> None:
+    def test_classifiers_value_none(
+        mock_py_project_toml: type[MockPyProjectToml],
+        mock_project: type[MockProject],
+        mock_classifiers_field: type[MockClassifiersField],
+    ) -> None:
         """Test validator when classifiers field has None value."""
-        project = TestTypingClassifierValidator.MockProject(None)
-        project.classifiers = TestTypingClassifierValidator.MockClassifiersField(None)
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
+        project = mock_project(None)
+        project.classifiers = mock_classifiers_field(None)
+        py_project_toml = mock_py_project_toml(project)
         validator = TypingClassifierValidator(py_project_toml)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_classifiers_not_list() -> None:
+    def test_classifiers_not_list(mock_py_project_toml_non_list_classifiers: MockPyProjectToml) -> None:
         """Test validator when classifiers is not a list."""
-        project = TestTypingClassifierValidator.MockProject("not-a-list")
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_non_list_classifiers)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_typing_classifier_present() -> None:
+    def test_typing_classifier_present(mock_py_project_toml_with_typing_classifier: MockPyProjectToml) -> None:
         """Test validator when 'Typing :: Typed' classifier is present."""
-        classifiers = ["Development Status :: 4 - Beta", "Typing :: Typed"]
-        project = TestTypingClassifierValidator.MockProject(classifiers)
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_with_typing_classifier)
         assert validator.is_typing_classifier_present() is True
 
     @staticmethod
-    def test_typing_classifier_missing() -> None:
+    def test_typing_classifier_missing(mock_py_project_toml_without_typing_classifier: MockPyProjectToml) -> None:
         """Test validator when 'Typing :: Typed' classifier is not present."""
-        classifiers = ["Development Status :: 4 - Beta", "License :: OSI Approved"]
-        project = TestTypingClassifierValidator.MockProject(classifiers)
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_without_typing_classifier)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
-    def test_empty_classifiers_list() -> None:
+    def test_empty_classifiers_list(mock_py_project_toml_empty_classifiers: MockPyProjectToml) -> None:
         """Test validator when classifiers list is empty."""
-        project = TestTypingClassifierValidator.MockProject([])
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
-        validator = TypingClassifierValidator(py_project_toml)
+        validator = TypingClassifierValidator(mock_py_project_toml_empty_classifiers)
         assert validator.is_typing_classifier_present() is False
 
     @staticmethod
     def test_extract_classifiers_value_py_project_toml_none() -> None:
-        """Test _extract_classifiers_value when py_project_toml is None."""
+        """Test classifiers_value when py_project_toml is None."""
         validator = TypingClassifierValidator(None)
-        with pytest.raises(RuntimeError, match="py_project_toml is unexpectedly None"):
-            validator._extract_classifiers_value()
+        assert validator.classifiers_value is None
 
     @staticmethod
-    def test_extract_classifiers_value_project_none() -> None:
-        """Test _extract_classifiers_value when project is None."""
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(None)
-        validator = TypingClassifierValidator(py_project_toml)
-        with pytest.raises(RuntimeError, match="project is unexpectedly None"):
-            validator._extract_classifiers_value()
+    def test_extract_classifiers_value_project_none(mock_py_project_toml_no_project: MockPyProjectToml) -> None:
+        """Test classifiers_value when project is None."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_project)
+        assert validator.classifiers_value is None
 
     @staticmethod
-    def test_extract_classifiers_value_classifiers_none() -> None:
-        """Test _extract_classifiers_value when classifiers is None."""
-        project = TestTypingClassifierValidator.MockProject(None)
+    def test_extract_classifiers_value_classifiers_none(
+        mock_py_project_toml: type[MockPyProjectToml],
+        mock_project: type[MockProject],
+    ) -> None:
+        """Test classifiers_value when classifiers is None."""
+        project = mock_project(None)
         project.classifiers = None
-        py_project_toml = TestTypingClassifierValidator.MockPyProjectToml(project)
+        py_project_toml = mock_py_project_toml(project)
         validator = TypingClassifierValidator(py_project_toml)
-        with pytest.raises(RuntimeError, match="classifiers is unexpectedly None"):
-            validator._extract_classifiers_value()
+        assert validator.classifiers_value is None

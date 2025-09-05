@@ -41,6 +41,7 @@ class TypingClassifierValidator:
     def __init__(self, py_project_toml: _HasProject | None) -> None:
         """Initialize with pyproject.toml configuration."""
         self.py_project_toml = py_project_toml
+        self.classifiers_value = self._extract_classifiers_value()
 
     def is_typing_classifier_present(self) -> bool:
         """Check if 'Typing :: Typed' classifier is present in pyproject.toml."""
@@ -49,37 +50,21 @@ class TypingClassifierValidator:
 
     def _get_classifiers_list(self) -> list[str] | None:
         """Extract classifiers list from pyproject.toml, returning None if invalid."""
-        if not self._has_valid_project_config():
+        if self.classifiers_value is None:
             return None
+        return self.classifiers_value if isinstance(self.classifiers_value, list) else None
 
-        # _has_valid_project_config() guarantees these exist and are not None
-        classifiers_value = self._extract_classifiers_value()
-        return classifiers_value if isinstance(classifiers_value, list) else None
-
-    def _extract_classifiers_value(self) -> object:
-        """Extract classifiers value from validated project configuration."""
-        # Type narrowing: _has_valid_project_config() guarantees these are not None
+    def _extract_classifiers_value(self) -> object | None:
+        """Extract classifiers value from project configuration, returning None if invalid."""
         if self.py_project_toml is None:
-            msg = "py_project_toml is unexpectedly None"
-            raise RuntimeError(msg)
+            return None
         project = self.py_project_toml.project
         if project is None:
-            msg = "project is unexpectedly None"
-            raise RuntimeError(msg)
+            return None
         classifiers = project.classifiers
         if classifiers is None:
-            msg = "classifiers is unexpectedly None"
-            raise RuntimeError(msg)
+            return None
         return classifiers.value
-
-    def _has_valid_project_config(self) -> bool:
-        """Check if pyproject.toml has valid project and classifiers configuration."""
-        return (
-            self.py_project_toml is not None
-            and self.py_project_toml.project is not None
-            and self.py_project_toml.project.classifiers is not None
-            and self.py_project_toml.project.classifiers.value is not None
-        )
 
 
 class Typed(Check):
