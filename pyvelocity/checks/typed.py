@@ -3,11 +3,44 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from packagediscovery import Setuptools
 
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
+
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.py_project_toml import PyProjectToml
+
+
+class TypingClassifierValidator:
+    """Validates the presence of 'Typing :: Typed' classifier in project metadata."""
+
+    def __init__(self, py_project_toml: PyProjectToml | None) -> None:
+        """Initialize with pyproject.toml configuration."""
+        self.py_project_toml = py_project_toml
+        self.classifiers_value = self._extract_classifiers_value()
+
+    def is_typing_classifier_present(self) -> bool:
+        """Check if 'Typing :: Typed' classifier is present in pyproject.toml."""
+        classifiers = self._get_classifiers_list()
+        return classifiers is not None and "Typing :: Typed" in classifiers
+
+    def _get_classifiers_list(self) -> list[str] | None:
+        """Extract classifiers list from pyproject.toml, returning None if invalid."""
+        if self.classifiers_value is None:
+            return None
+        return self.classifiers_value if isinstance(self.classifiers_value, list) else None
+
+    def _extract_classifiers_value(self) -> object | None:
+        """Extract classifiers value from project configuration, returning None if invalid."""
+        if self.py_project_toml is None:
+            return None
+        project = self.py_project_toml.project
+        if project is None:
+            return None
+        return project.classifiers.value
 
 
 class Typed(Check):
@@ -17,20 +50,33 @@ class Typed(Check):
 
     def execute(self) -> Result:
         """Execute the typed check."""
-        # Check if pyproject.toml has the package-data configuration
-        has_package_data_config = self._check_package_data_config()
-        py_typed_files_exist = self._check_py_typed_files()
+        check_results = self._perform_typed_checks()
 
-        if has_package_data_config and py_typed_files_exist:
+        if all(check_results.values()):
             return Result(self.ID, is_ok=True, message="")
 
-        messages = []
-        if not has_package_data_config:
-            messages.append('Missing tool.setuptools.package-data "*" = ["py.typed"] configuration')
-        if not py_typed_files_exist:
-            messages.append("Missing py.typed files in package directories")
+        error_messages = self._build_error_messages(check_results)
+        return Result(self.ID, is_ok=False, message="\n".join(error_messages))
 
-        return Result(self.ID, is_ok=False, message="\n".join(messages))
+    def _perform_typed_checks(self) -> dict[str, bool]:
+        """Perform all typed check validations and return results."""
+        classifier_validator = TypingClassifierValidator(self.configuration_files.py_project_toml)
+        return {
+            "package_data_config": self._check_package_data_config(),
+            "py_typed_files": self._check_py_typed_files(),
+            "typing_classifier": classifier_validator.is_typing_classifier_present(),
+        }
+
+    def _build_error_messages(self, check_results: dict[str, bool]) -> list[str]:
+        """Build error messages for failed checks."""
+        messages = []
+        if not check_results["package_data_config"]:
+            messages.append('Missing tool.setuptools.package-data "*" = ["py.typed"] configuration')
+        if not check_results["py_typed_files"]:
+            messages.append("Missing py.typed files in package directories")
+        if not check_results["typing_classifier"]:
+            messages.append('Missing "Typing :: Typed" classifier in pyproject.toml')
+        return messages
 
     def _check_package_data_config(self) -> bool:
         """Check if pyproject.toml has the correct package-data configuration."""

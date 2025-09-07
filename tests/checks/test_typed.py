@@ -1,14 +1,21 @@
 """Tests for typed check."""
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
 
-from pyvelocity.checks import Result
 from pyvelocity.checks.typed import Typed
+from pyvelocity.checks.typed import TypingClassifierValidator
 from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+
+if TYPE_CHECKING:
+    from pyvelocity.checks import Result
+    from pyvelocity.configurations.files.py_project_toml import PyProjectToml
 
 
 class TestTyped:
@@ -31,7 +38,8 @@ class TestTyped:
                 ["pyproject_typed_missing_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration',
+                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                'Missing "Typing :: Typed" classifier in pyproject.toml',
                 False,
             ),
             # Wrong package-data config
@@ -39,7 +47,8 @@ class TestTyped:
                 ["pyproject_typed_wrong_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration',
+                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                'Missing "Typing :: Typed" classifier in pyproject.toml',
                 False,
             ),
             # Missing py.typed files
@@ -55,7 +64,16 @@ class TestTyped:
                 ["pyproject_typed_non_dict_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration',
+                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                'Missing "Typing :: Typed" classifier in pyproject.toml',
+                False,
+            ),
+            # Missing typing classifier
+            (
+                ["pyproject_typed_missing_classifier.toml", "setup_success.cfg"],
+                ["testpackage"],
+                ["testpackage/py.typed"],
+                'Missing "Typing :: Typed" classifier in pyproject.toml',
                 False,
             ),
             # Both config and files missing
@@ -64,7 +82,8 @@ class TestTyped:
                 ["testpackage"],
                 [],
                 'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-                "Missing py.typed files in package directories",
+                "Missing py.typed files in package directories\n"
+                'Missing "Typing :: Typed" classifier in pyproject.toml',
                 False,
             ),
         ],
@@ -139,3 +158,73 @@ class TestTyped:
             # Should fail due to package discovery failure
             assert "Missing py.typed files in package directories" in result.message
             assert result.is_ok is False
+
+
+class TestTypingClassifierValidator:
+    """Test the TypingClassifierValidator class using pytest fixtures."""
+
+    @staticmethod
+    def test_no_pyproject_toml() -> None:
+        """Test validator when no pyproject.toml exists."""
+        validator = TypingClassifierValidator(None)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_no_project_section(mock_py_project_toml_no_project: PyProjectToml) -> None:
+        """Test validator when project section is missing."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_project)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_no_classifiers_field(mock_py_project_toml_no_classifiers: PyProjectToml) -> None:
+        """Test validator when classifiers field is missing."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_classifiers)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_classifiers_value_none(mock_py_project_toml_no_classifiers: PyProjectToml) -> None:
+        """Test validator when classifiers field has None value."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_classifiers)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_classifiers_not_list(mock_py_project_toml_non_list_classifiers: PyProjectToml) -> None:
+        """Test validator when classifiers is not a list."""
+        validator = TypingClassifierValidator(mock_py_project_toml_non_list_classifiers)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_typing_classifier_present(mock_py_project_toml_with_typing_classifier: PyProjectToml) -> None:
+        """Test validator when 'Typing :: Typed' classifier is present."""
+        validator = TypingClassifierValidator(mock_py_project_toml_with_typing_classifier)
+        assert validator.is_typing_classifier_present() is True
+
+    @staticmethod
+    def test_typing_classifier_missing(mock_py_project_toml_without_typing_classifier: PyProjectToml) -> None:
+        """Test validator when 'Typing :: Typed' classifier is not present."""
+        validator = TypingClassifierValidator(mock_py_project_toml_without_typing_classifier)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_empty_classifiers_list(mock_py_project_toml_empty_classifiers: PyProjectToml) -> None:
+        """Test validator when classifiers list is empty."""
+        validator = TypingClassifierValidator(mock_py_project_toml_empty_classifiers)
+        assert validator.is_typing_classifier_present() is False
+
+    @staticmethod
+    def test_extract_classifiers_value_py_project_toml_none() -> None:
+        """Test classifiers_value when py_project_toml is None."""
+        validator = TypingClassifierValidator(None)
+        assert validator.classifiers_value is None
+
+    @staticmethod
+    def test_extract_classifiers_value_project_none(mock_py_project_toml_no_project: PyProjectToml) -> None:
+        """Test classifiers_value when project is None."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_project)
+        assert validator.classifiers_value is None
+
+    @staticmethod
+    def test_extract_classifiers_value_classifiers_none(mock_py_project_toml_no_classifiers: PyProjectToml) -> None:
+        """Test classifiers_value when classifiers is None."""
+        validator = TypingClassifierValidator(mock_py_project_toml_no_classifiers)
+        assert validator.classifiers_value is None
