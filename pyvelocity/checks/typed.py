@@ -3,42 +3,21 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Protocol
+from typing import TYPE_CHECKING
 
 from packagediscovery import Setuptools
 
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
 
-
-class _HasClassifiersValue(Protocol):
-    """Protocol for objects that have a classifiers value."""
-
-    @property
-    def value(self) -> object:
-        """Get the classifiers value."""
-
-
-class _HasClassifiers(Protocol):
-    """Protocol for objects that have a classifiers attribute."""
-
-    @property
-    def classifiers(self) -> _HasClassifiersValue | None:
-        """Get the classifiers configuration."""
-
-
-class _HasProject(Protocol):
-    """Protocol for objects that have a project attribute."""
-
-    @property
-    def project(self) -> _HasClassifiers | None:
-        """Get the project configuration."""
+if TYPE_CHECKING:
+    from pyvelocity.configurations.files.py_project_toml import PyProjectToml
 
 
 class TypingClassifierValidator:
     """Validates the presence of 'Typing :: Typed' classifier in project metadata."""
 
-    def __init__(self, py_project_toml: _HasProject | None) -> None:
+    def __init__(self, py_project_toml: PyProjectToml | None) -> None:
         """Initialize with pyproject.toml configuration."""
         self.py_project_toml = py_project_toml
         self.classifiers_value = self._extract_classifiers_value()
@@ -61,10 +40,7 @@ class TypingClassifierValidator:
         project = self.py_project_toml.project
         if project is None:
             return None
-        classifiers = project.classifiers
-        if classifiers is None:
-            return None
-        return classifiers.value
+        return project.classifiers.value
 
 
 class Typed(Check):
