@@ -159,6 +159,34 @@ def mock_config_file() -> ConfigurationFile:
 
 
 @pytest.fixture
+def temp_setup_py() -> Generator[Path, None, None]:
+    """Fixture providing a temporary setup.py file for testing legacy file detection."""
+    setup_py_path = Path("setup.py")
+
+    # Create a minimal setup.py content
+    setup_py_content = '''"""Setup script for testing legacy file detection."""
+
+from setuptools import setup
+
+setup(
+    name="test-package",
+    version="0.1.0",
+    description="Test package for legacy file detection",
+)
+'''
+
+    # Create the setup.py file
+    setup_py_path.write_text(setup_py_content, encoding="utf-8")
+
+    try:
+        yield setup_py_path
+    finally:
+        # Clean up - remove the file after test
+        if setup_py_path.exists():
+            setup_py_path.unlink()
+
+
+@pytest.fixture
 def mock_py_project_toml_with_typing_classifier() -> PyProjectToml:
     """Fixture providing a real pyproject.toml with 'Typing :: Typed' classifier."""
     content = """[project]

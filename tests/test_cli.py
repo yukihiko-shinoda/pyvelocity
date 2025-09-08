@@ -1,6 +1,7 @@
 """Tests for `pyvelocity` package."""
 
 # Reason: Accept risk of using subprocess.
+from pathlib import Path
 from subprocess import run  # nosec B404
 from unittest.mock import patch
 
@@ -16,7 +17,7 @@ def test_echo_success() -> None:
     cli.echo_success()
 
 
-def test_echo_success_in_subprocess() -> None:
+def test_echo_success_in_subprocess(temp_setup_py: Path) -> None:
     """Function echo_success() should fallback to no emoji.
 
     When echo emoji in subprocess on Windows, Following error raised:
@@ -29,6 +30,9 @@ def test_echo_success_in_subprocess() -> None:
     - UnicodeEncodeError in Windows agent CI pipelines
       https://gist.github.com/NodeJSmith/e7e37f2d3f162456869f015f842bcf15
     """
+    # Ensure setup.py exists for legacy files check
+    assert temp_setup_py.exists()
+
     # Reason: Accept risk of using subprocess.
     completed_process = run(  # nosec B603 B607
         "pyvelocity",  # noqa: S607
