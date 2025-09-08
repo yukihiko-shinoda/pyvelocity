@@ -138,10 +138,11 @@ class Project(Section):
     """Represents the [project] section in pyproject.toml configuration files."""
 
     NAME: ClassVar[str] = "project"
-    LIST_PARAMETER_NAME: ClassVar[list[str]] = ["readme", "requires-python", "classifiers"]
+    LIST_PARAMETER_NAME: ClassVar[list[str]] = ["readme", "requires-python", "classifiers", "keywords"]
     readme: ConfigurationFileParameter[str | None]
     requires_python: ConfigurationFileParameter[str | None]
     classifiers: ConfigurationFileParameter[list[str] | None]
+    keywords: ConfigurationFileParameter[list[str] | None]
 
     def requires_python_minimum_version(self) -> str | None:
         """Extract the minimum version from requires-python specification."""

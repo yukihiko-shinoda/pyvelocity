@@ -5,6 +5,7 @@ from collections.abc import Generator
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
 from pyvelocity.checks.classifiers import Classifiers
+from pyvelocity.checks.keywords import Keywords
 from pyvelocity.checks.line_length import LineLength
 from pyvelocity.checks.readme import Readme
 from pyvelocity.checks.requires_python import RequiresPython
@@ -42,6 +43,7 @@ class Checks:
             Classifiers,
             ZipSafeFalse,
             Typed,
+            Keywords,
         ]
         self.checks = (
             check_class(configuration_files, configurations)
