@@ -49,6 +49,10 @@ Ensures that the `requires-python` field supports the latest stable Python versi
 
 Checks that the `readme` field is properly configured as `"README.md"` in the `[project]` section of `pyproject.toml`.
 
+#### `keywords`
+
+Ensures that at least one keyword is defined in the `[project]` section of `pyproject.toml`. Keywords help improve package discoverability on PyPI and other package indexes.
+
 ### Package Configuration Checks
 
 #### `zip-safe-false`
@@ -114,6 +118,7 @@ Available check IDs:
 - `classifiers`
 - `requires-python`
 - `readme`
+- `keywords`
 - `zip-safe-false`
 - `typed`
 

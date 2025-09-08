@@ -25,6 +25,7 @@ class TestProjectVersionLogic:
             readme=ConfigurationFileParameter(mock_where, "readme", None),
             requires_python=ConfigurationFileParameter(mock_where, "requires-python", requires_python_value),
             classifiers=ConfigurationFileParameter(mock_where, "classifiers", None),
+            keywords=ConfigurationFileParameter(mock_where, "keywords", None),
         )
 
     @staticmethod
@@ -175,6 +176,7 @@ class TestRequiresPythonAnalyzer:
             readme=Mock(),
             requires_python=ConfigurationFileParameter(WhereToolDefault(Mock()), "requires-python", None),
             classifiers=Mock(),
+            keywords=Mock(),
         )
 
         result = project.get_requires_python_supported_versions(project)
