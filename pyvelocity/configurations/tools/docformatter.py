@@ -36,8 +36,6 @@ class Docformatter(Tool):
             ConfigurationFileParameter.NAME_TOOL_DEFAULT + " wrap summaries",
             79,
         )
-        if configuration_files.setup_cfg:
-            self.overwrite(configuration_files.setup_cfg.docformatter)
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.docformatter)
 

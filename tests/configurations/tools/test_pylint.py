@@ -10,6 +10,5 @@ class TestFormat:
     @staticmethod
     @pytest.mark.usefixtures("configured_tmp_path")
     @pytest.mark.parametrize("files", [("pyproject_success.toml", "setup_pylint.cfg")])
-    def test() -> None:
-        configuration_files = ConfigurationFiles()
+    def test(configuration_files: ConfigurationFiles) -> None:
         Format(configuration_files)

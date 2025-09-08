@@ -1,5 +1,7 @@
 """Tests for aggregation.py."""
 
+from pathlib import Path
+
 import pytest
 
 from pyvelocity.checks.aggregation import Checks
@@ -16,14 +18,14 @@ class TestChecks:
     @pytest.mark.parametrize(
         ("files", "expect_message", "expect_is_ok"),
         [
-            (["pyproject_success.toml", "setup_success.cfg"], "", True),
+            (["pyproject_success.toml"], "", True),
             (
-                ["pyproject_error.toml", "setup_error.cfg"],
+                ["pyproject_error.toml"],
                 (
                     "Line length are not consistent.\n"
                     "\tMost common = 119\n"
                     "\tpyproject.toml tool.docformatter wrap-summaries = 118\n"
-                    "\tsetup.cfg flake8 max-line-length = 118 (B950 in flake8-bugbear detects: 130)\n"
+                    "\tFlake8 tool default max-line-length = 79 (B950 in flake8-bugbear detects: 87)\n"
                     "\tpyproject.toml tool.ruff line-length = 118\n"
                     "Python version classifiers don't match requires-python '>=3.5': missing classifiers: "
                     "Programming Language :: Python :: 3.10, "
@@ -35,20 +37,22 @@ class TestChecks:
             ),
         ],
     )
-    def test(expect_message: str, *, expect_is_ok: bool) -> None:
+    def test(
+        configuration_files: ConfigurationFiles,
+        configurations: Configurations,
+        expect_message: str,
+        *,
+        expect_is_ok: bool,
+    ) -> None:
         """Tests general case."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         results = Results(list(Checks(configuration_files, configurations).execute()))
         assert results.message == expect_message
         assert results.is_ok == expect_is_ok
 
     @staticmethod
     @pytest.mark.usefixtures("ch_tmp_path")
-    def test_no_py_project_toml() -> None:
+    def test_no_py_project_toml(configuration_files: ConfigurationFiles, configurations: Configurations) -> None:
         """Tests case when no pyproject.toml."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         results = Results(list(Checks(configuration_files, configurations).execute()))
         assert results.message == (
             "It's recommended to use pyproject.toml to gather settings for project.\n"
@@ -67,4 +71,18 @@ class TestChecks:
             'Missing "Typing :: Typed" classifier in pyproject.toml\n'
             "pyproject.toml is required for keywords check"
         )
+        assert results.is_ok is False
+
+    @staticmethod
+    @pytest.mark.usefixtures("ch_tmp_path")
+    def test_legacy_setup_files_detected(
+        configuration_files: ConfigurationFiles,
+        configurations: Configurations,
+    ) -> None:
+        """Tests case when legacy setup files are detected."""
+        # Create a setup.cfg file to trigger the legacy-setup-files check
+        Path("setup.cfg").touch()
+
+        results = Results(list(Checks(configuration_files, configurations).execute()))
+        assert "Legacy setup files found: setup.cfg. Use pyproject.toml instead." in results.message
         assert results.is_ok is False

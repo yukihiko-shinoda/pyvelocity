@@ -6,6 +6,7 @@ from pyvelocity.checks import Check
 from pyvelocity.checks import Result
 from pyvelocity.checks.classifiers import Classifiers
 from pyvelocity.checks.keywords import Keywords
+from pyvelocity.checks.legacy_setup_files import LegacySetupFiles
 from pyvelocity.checks.line_length import LineLength
 from pyvelocity.checks.readme import Readme
 from pyvelocity.checks.requires_python import RequiresPython
@@ -37,6 +38,7 @@ class Checks:
     def __init__(self, configuration_files: ConfigurationFiles, configurations: Configurations) -> None:
         check_classes: list[type[Check]] = [
             UsingPyProjectToml,
+            LegacySetupFiles,
             LineLength,
             Readme,
             RequiresPython,

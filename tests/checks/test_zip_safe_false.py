@@ -1,12 +1,11 @@
 """Tests for zip-safe-false check."""
 
-from unittest.mock import Mock
-
 import pytest
 
 from pyvelocity.checks.zip_safe_false import ZipSafeFalse
 from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+from pyvelocity.configurations.files.sections.setuptools import Setuptools
 
 
 class TestZipSafeFalse:
@@ -44,10 +43,14 @@ class TestZipSafeFalse:
             ),
         ],
     )
-    def test_zip_safe_false_check(expect_message: str, *, expect_is_ok: bool) -> None:
+    def test_zip_safe_false_check(
+        configuration_files: ConfigurationFiles,
+        configurations: Configurations,
+        expect_message: str,
+        *,
+        expect_is_ok: bool,
+    ) -> None:
         """Tests zip-safe-false check scenarios."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         zip_safe_false_check = ZipSafeFalse(configuration_files, configurations)
         result = zip_safe_false_check.execute()
         assert result.message == expect_message
@@ -55,10 +58,8 @@ class TestZipSafeFalse:
 
     @staticmethod
     @pytest.mark.usefixtures("ch_tmp_path")
-    def test_no_pyproject_toml() -> None:
+    def test_no_pyproject_toml(configuration_files: ConfigurationFiles, configurations: Configurations) -> None:
         """Tests case when no pyproject.toml exists."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         zip_safe_false_check = ZipSafeFalse(configuration_files, configurations)
         result = zip_safe_false_check.execute()
         assert result.message == "pyproject.toml is required for zip-safe-false check"
@@ -73,10 +74,9 @@ class TestZipSafeFalseValueHandling:
         "zip_safe_value",
         ["false", "False", "FALSE"],
     )
-    def test_zip_safe_accepts_false_values(zip_safe_value: str) -> None:
+    def test_zip_safe_accepts_false_values(mock_setuptools: Setuptools, zip_safe_value: str) -> None:
         """Test zip-safe accepts 'false' values (case insensitive)."""
         zip_safe_false_check = ZipSafeFalse(None, None)  # type: ignore[arg-type]
-        mock_setuptools = Mock()
         mock_setuptools.zip_safe.value = zip_safe_value
 
         result = zip_safe_false_check.check_zip_safe(mock_setuptools)
@@ -87,10 +87,9 @@ class TestZipSafeFalseValueHandling:
         "zip_safe_value",
         ["true", "True", "TRUE", "1", "0", "yes", "no"],
     )
-    def test_zip_safe_rejects_non_false_values(zip_safe_value: str) -> None:
+    def test_zip_safe_rejects_non_false_values(mock_setuptools: Setuptools, zip_safe_value: str) -> None:
         """Test zip-safe rejects non-'false' values."""
         zip_safe_false_check = ZipSafeFalse(None, None)  # type: ignore[arg-type]
-        mock_setuptools = Mock()
         mock_setuptools.zip_safe.value = zip_safe_value
 
         result = zip_safe_false_check.check_zip_safe(mock_setuptools)

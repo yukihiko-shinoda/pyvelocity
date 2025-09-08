@@ -16,27 +16,27 @@ class TestKeywords:
         ("files", "expect_message", "expect_is_ok"),
         [
             (
-                ["pyproject_success.toml", "setup_success.cfg"],
+                ["pyproject_success.toml"],
                 "",
                 True,
             ),
             (
-                ["pyproject_keywords_missing.toml", "setup_success.cfg"],
+                ["pyproject_keywords_missing.toml"],
                 "keywords field is missing in [project] section of pyproject.toml",
                 False,
             ),
             (
-                ["pyproject_keywords_empty.toml", "setup_success.cfg"],
+                ["pyproject_keywords_empty.toml"],
                 "At least one keyword must be defined in [project] section of pyproject.toml",
                 False,
             ),
             (
-                ["pyproject_keywords_invalid_type.toml", "setup_success.cfg"],
+                ["pyproject_keywords_invalid_type.toml"],
                 "keywords field must be a list in [project] section of pyproject.toml",
                 False,
             ),
             (
-                ["pyproject_no_project.toml", "setup_success.cfg"],
+                ["pyproject_no_project.toml"],
                 "Project section is missing in pyproject.toml",
                 False,
             ),

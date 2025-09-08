@@ -25,8 +25,6 @@ class Flake8(Tool):
             ConfigurationFileParameter.NAME_TOOL_DEFAULT + " max-line-length",
             79,
         )
-        if configuration_files.setup_cfg:
-            self.overwrite(configuration_files.setup_cfg.flake8)
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.flake8)
 

@@ -12,11 +12,8 @@ from pyvelocity.configurations.files.sections import Section
 from pyvelocity.configurations.files.sections import WhereFile
 
 if TYPE_CHECKING:  # pragma: no cover
-    from collections.abc import MutableMapping
-
     from pyvelocity.configurations.files import ConfigurationFile
     from pyvelocity.configurations.files.py_project_toml import PyProjectToml
-    from pyvelocity.configurations.files.setup_cfg import SetupCfg
 
 TypeVarSection = TypeVar("TypeVarSection", bound=Section)
 
@@ -85,22 +82,3 @@ class PyProjectTomlSectionFactory:
         if config is None:
             return None
         return SectionFactoryForPyProjectToml(py_project_toml, node, class_configuration, config).create_section()
-
-
-class SetupCfgSectionFactory:
-    """Factory for Section instance for SetupCfg."""
-
-    @classmethod
-    def create(
-        cls,
-        setup_cfg: SetupCfg,
-        node: str | None,
-        class_configuration: type[TypeVarSection],
-        config_parser: MutableMapping[str, Any],
-    ) -> TypeVarSection | None:
-        """Creates Section instance for SetupCfg."""
-        try:
-            config = dict(config_parser[f"{node}.{class_configuration.NAME}" if node else class_configuration.NAME])
-        except KeyError:
-            return None
-        return SectionFactory(setup_cfg, node, class_configuration, config).create_section()

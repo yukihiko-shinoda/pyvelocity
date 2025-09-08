@@ -10,13 +10,9 @@ from typing import ClassVar
 from pyvelocity.configurations.files.sections import ConfigurationFileParameter
 from pyvelocity.configurations.files.sections import Section
 from pyvelocity.configurations.files.sections.factory import PyProjectTomlSectionFactory
-from pyvelocity.configurations.files.sections.factory import SetupCfgSectionFactory
 
 if TYPE_CHECKING:  # pragma: no cover
-    from configparser import ConfigParser
-
     from pyvelocity.configurations.files.py_project_toml import PyProjectToml
-    from pyvelocity.configurations.files.setup_cfg import SetupCfg
 
 
 @dataclass
@@ -91,37 +87,3 @@ class PyProjectTomlPylintFactory:
             None,
             None,
         )
-
-
-class SetupCfgPylintFactory:
-    """Factory for pylint node."""
-
-    @staticmethod
-    def create(setup_cfg: SetupCfg, config_parser: ConfigParser) -> Pylint | None:
-        """Creates node of Pylint."""
-        pylint = Pylint(
-            None,
-            None,
-            None,
-            None,
-            None,
-            SetupCfgSectionFactory.create(setup_cfg, Pylint.NAME, Format, config_parser),
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-        )
-        if all(v is None for v in pylint.__dict__.values()):
-            return None
-        return pylint
