@@ -135,24 +135,23 @@ class TestTyped:
 
     @staticmethod
     @pytest.mark.usefixtures("ch_tmp_path")
-    def test_no_pyproject_toml() -> None:
+    def test_no_pyproject_toml(configuration_files: ConfigurationFiles, configurations: Configurations) -> None:
         """Tests case when no pyproject.toml exists."""
         with patch("pyvelocity.checks.typed.Setuptools") as mock_setuptools:
             mock_instance = mock_setuptools.return_value
             mock_instance.packages = ["testpackage"]
-            configuration_files = ConfigurationFiles()
-            configurations = Configurations(configuration_files)
             typed_check = Typed(configuration_files, configurations)
             result = typed_check.execute()
             assert 'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration' in result.message
             assert result.is_ok is False
 
     @staticmethod
-    def test_package_discovery_failure() -> None:
+    def test_package_discovery_failure(
+        configuration_files: ConfigurationFiles,
+        configurations: Configurations,
+    ) -> None:
         """Tests case when package discovery fails."""
         with patch("pyvelocity.checks.typed.Setuptools", side_effect=RuntimeError("Discovery failed")):
-            configuration_files = ConfigurationFiles()
-            configurations = Configurations(configuration_files)
             typed_check = Typed(configuration_files, configurations)
             result = typed_check.execute()
             # Should fail due to package discovery failure

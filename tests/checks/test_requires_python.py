@@ -40,10 +40,14 @@ class TestRequiresPython:
             ),
         ],
     )
-    def test_requires_python_check(expect_message: str, *, expect_is_ok: bool) -> None:
+    def test_requires_python_check(
+        configuration_files: ConfigurationFiles,
+        configurations: Configurations,
+        expect_message: str,
+        *,
+        expect_is_ok: bool,
+    ) -> None:
         """Tests requires-python check scenarios."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         requires_python_check = RequiresPython(configuration_files, configurations)
         result = requires_python_check.execute()
         assert result.message == expect_message
@@ -51,10 +55,8 @@ class TestRequiresPython:
 
     @staticmethod
     @pytest.mark.usefixtures("ch_tmp_path")
-    def test_no_pyproject_toml() -> None:
+    def test_no_pyproject_toml(configuration_files: ConfigurationFiles, configurations: Configurations) -> None:
         """Tests case when no pyproject.toml exists."""
-        configuration_files = ConfigurationFiles()
-        configurations = Configurations(configuration_files)
         requires_python_check = RequiresPython(configuration_files, configurations)
         result = requires_python_check.execute()
         assert result.message == "pyproject.toml is required for requires-python check"

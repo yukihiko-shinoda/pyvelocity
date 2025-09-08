@@ -10,10 +10,17 @@ from typing import TYPE_CHECKING
 import pytest
 from click.testing import CliRunner
 
+from pyvelocity.checks import Result
+from pyvelocity.configurations.aggregation import Configurations
+from pyvelocity.configurations.files import ConfigurationFile
+from pyvelocity.configurations.files.aggregation import ConfigurationFiles
 from pyvelocity.configurations.files.py_project_toml import PyProjectToml
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from collections.abc import Generator
+
+    from pyvelocity.configurations.files.sections.setuptools import Setuptools
 
 collect_ignore = ["setup.py"]
 
@@ -44,7 +51,8 @@ def ch_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
 def configured_tmp_path(ch_tmp_path: Path, resource_path_root: Path, files: list[str]) -> Path:  # pylint: disable=redefined-outer-name
     """Prepares configuration files in temporary directory."""
     shutil.copy(resource_path_root / files[0], ch_tmp_path / "pyproject.toml")
-    shutil.copy(resource_path_root / files[1], ch_tmp_path / "setup.cfg")
+    if len(files) > 1:
+        shutil.copy(resource_path_root / files[1], ch_tmp_path / "setup.cfg")
     return ch_tmp_path
 
 
@@ -58,6 +66,96 @@ def _create_temp_pyproject_toml(content: str) -> PyProjectToml:
         return PyProjectToml(temp_path)
     finally:
         temp_path.unlink()  # Clean up the temporary file
+
+
+@pytest.fixture
+def configuration_files() -> ConfigurationFiles:
+    """Fixture providing a ConfigurationFiles instance."""
+    return ConfigurationFiles()
+
+
+@pytest.fixture
+# Reason: Using fixture. pylint: disable-next=redefined-outer-name
+def configurations(configuration_files: ConfigurationFiles) -> Configurations:
+    """Fixture providing a Configurations instance."""
+    return Configurations(configuration_files)
+
+
+@pytest.fixture
+def successful_result() -> Result:
+    """Fixture providing a successful Result for testing."""
+    return Result("test", is_ok=True, message="")
+
+
+@pytest.fixture
+def failed_result() -> Result:
+    """Fixture providing a failed Result for testing."""
+    return Result("test", is_ok=False, message="Test failure message")
+
+
+@pytest.fixture
+def mock_setuptools() -> Setuptools:
+    """Fixture providing a real Setuptools object for testing."""
+    # Create a temporary pyproject.toml with setuptools configuration
+    content = """[tool.setuptools]
+zip-safe = "false"
+package-data = {"*" = ["py.typed"]}
+"""
+    pyproject_toml = _create_temp_pyproject_toml(content)
+    setuptools = pyproject_toml.setuptools
+
+    # Ensure setuptools is not None (it should never be with valid config)
+    if setuptools is None:
+        msg = "Failed to create setuptools configuration"
+        raise RuntimeError(msg)
+
+    # Add packages attribute for typed check compatibility
+    setuptools.packages = ["testpackage"]  # type: ignore[attr-defined]
+
+    return setuptools
+
+
+@pytest.fixture
+def mock_setuptools_with_packages() -> Callable[[list[str]], Setuptools]:
+    """Fixture providing a real Setuptools object factory with specific packages."""
+
+    def _mock_setuptools_with_packages(packages: list[str]) -> Setuptools:
+        # Create a temporary pyproject.toml with setuptools configuration
+        content = """[tool.setuptools]
+zip-safe = "false"
+package-data = {"*" = ["py.typed"]}
+"""
+        pyproject_toml = _create_temp_pyproject_toml(content)
+        setuptools = pyproject_toml.setuptools
+
+        # Ensure setuptools is not None (it should never be with valid config)
+        if setuptools is None:
+            msg = "Failed to create setuptools configuration"
+            raise RuntimeError(msg)
+
+        # Set the specific packages for this instance
+        setuptools.packages = packages  # type: ignore[attr-defined]
+
+        return setuptools
+
+    return _mock_setuptools_with_packages
+
+
+@pytest.fixture
+def mock_config_file() -> ConfigurationFile:
+    """Fixture providing a mock ConfigurationFile for testing."""
+
+    class MockConfigFile(ConfigurationFile):
+        """Mock implementation of ConfigurationFile interface."""
+
+        def __init__(self, name: str = "test.toml") -> None:
+            self._name = name
+
+        @property
+        def name(self) -> str:
+            return self._name
+
+    return MockConfigFile()
 
 
 @pytest.fixture

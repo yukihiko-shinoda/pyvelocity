@@ -25,8 +25,6 @@ class Format(Tool):
             ConfigurationFileParameter.NAME_TOOL_DEFAULT + " max-line-length",
             100,
         )
-        if configuration_files.setup_cfg and configuration_files.setup_cfg.pylint:
-            self.overwrite(configuration_files.setup_cfg.pylint.format)
         if configuration_files.py_project_toml and configuration_files.py_project_toml.pylint:
             self.overwrite(configuration_files.py_project_toml.pylint.format)
 

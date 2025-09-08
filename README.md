@@ -33,7 +33,11 @@ Ensures consistent line length settings across all Python development tools:
 
 #### `using-py-project-toml`
 
-Verifies that your project uses `pyproject.toml` for configuration instead of legacy files like `setup.cfg`.
+Verifies that your project uses `pyproject.toml` for configuration instead of legacy files.
+
+#### `legacy-setup-files`
+
+Ensures that neither `setup.py` nor `setup.cfg` files are present in the project. These legacy configuration files should be replaced with `pyproject.toml` for modern Python packaging.
 
 ### Project Metadata Checks
 
@@ -114,7 +118,8 @@ filter = [
 Available check IDs:
 
 - `line-length`
-- `using-py-project-toml` 
+- `using-py-project-toml`
+- `legacy-setup-files`
 - `classifiers`
 - `requires-python`
 - `readme`

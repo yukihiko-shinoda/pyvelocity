@@ -25,8 +25,6 @@ class Isort(Tool):
             ConfigurationFileParameter.NAME_TOOL_DEFAULT + " Line Length",
             79,
         )
-        if configuration_files.setup_cfg:
-            self.overwrite(configuration_files.setup_cfg.isort)
         if configuration_files.py_project_toml:
             self.overwrite(configuration_files.py_project_toml.isort)
 
