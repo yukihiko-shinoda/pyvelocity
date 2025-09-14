@@ -54,6 +54,7 @@ def test_echo_success_in_subprocess(temp_setup_py: Path) -> None:
             ["pyproject_success.toml", "setup_success.cfg"],
             3,
             "Legacy setup files found: setup.cfg. Use pyproject.toml instead.\n"
+            "README.md file not found\n"
             "Error: Looks there are some of improvements.\n",
         ),
         (
@@ -71,6 +72,7 @@ def test_echo_success_in_subprocess(temp_setup_py: Path) -> None:
                 "Programming Language :: Python :: 3.11, "
                 "Programming Language :: Python :: 3.12, "
                 "Programming Language :: Python :: 3.13\n"
+                "README.md file not found\n"
                 "Error: Looks there are some of improvements.\n"
             ),
         ),

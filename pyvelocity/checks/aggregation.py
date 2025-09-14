@@ -4,6 +4,7 @@ from collections.abc import Generator
 
 from pyvelocity.checks import Check
 from pyvelocity.checks import Result
+from pyvelocity.checks.badges import Badges
 from pyvelocity.checks.classifiers import Classifiers
 from pyvelocity.checks.keywords import Keywords
 from pyvelocity.checks.legacy_setup_files import LegacySetupFiles
@@ -46,6 +47,7 @@ class Checks:
             ZipSafeFalse,
             Typed,
             Keywords,
+            Badges,
         ]
         self.checks = (
             check_class(configuration_files, configurations)

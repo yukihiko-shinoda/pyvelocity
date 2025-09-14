@@ -6,7 +6,7 @@
 [![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity)
 [![Dependabot](https://flat.badgen.net/github/dependabot/yukihiko-shinoda/pyvelocity?icon=dependabot)](https://github.com/yukihiko-shinoda/pyvelocity/security/dependabot)
 [![Python versions](https://img.shields.io/pypi/pyversions/pyvelocity.svg)](https://pypi.org/project/pyvelocity)
-[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fpyvelocity)](http://twitter.com/share?text=PyVelocity&url=https://pypi.org/project/pyvelocity/&hashtags=python)
+[![X URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fpyvelocity)](https://x.com/intent/post?text=PyVelocity&url=https%3A%2F%2Fpypi.org%2Fproject%2Fpyvelocity%2F&hashtags=python)
 
 Automates task to check configurations about Python project to follow best practices to increase development velocity.
 
