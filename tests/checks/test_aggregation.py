@@ -18,7 +18,7 @@ class TestChecks:
     @pytest.mark.parametrize(
         ("files", "expect_message", "expect_is_ok"),
         [
-            (["pyproject_success.toml"], "", True),
+            (["pyproject_success.toml"], "README.md file not found", False),
             (
                 ["pyproject_error.toml"],
                 (
@@ -31,7 +31,8 @@ class TestChecks:
                     "Programming Language :: Python :: 3.10, "
                     "Programming Language :: Python :: 3.11, "
                     "Programming Language :: Python :: 3.12, "
-                    "Programming Language :: Python :: 3.13"
+                    "Programming Language :: Python :: 3.13\n"
+                    "README.md file not found"
                 ),
                 False,
             ),
@@ -69,7 +70,8 @@ class TestChecks:
             'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
             "Missing py.typed files in package directories\n"
             'Missing "Typing :: Typed" classifier in pyproject.toml\n'
-            "pyproject.toml is required for keywords check"
+            "pyproject.toml is required for keywords check\n"
+            "README.md file not found"
         )
         assert results.is_ok is False
 
