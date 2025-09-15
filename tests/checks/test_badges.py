@@ -59,3 +59,23 @@ class TestBadges:
         result = badges_check.execute()
         assert result.message == ""
         assert result.is_ok is True
+
+    @staticmethod
+    @pytest.mark.usefixtures("ch_tmp_path")
+    def test_missing_badges() -> None:
+        """Tests case when some badges are missing from README.md."""
+        readme_content = """
+        # Project
+        [![Test](https://github.com/user/repo/workflows/Test/badge.svg)](https://github.com/user/repo/actions?query=workflow%3ATest)
+        """
+        Path("README.md").write_text(readme_content, encoding="utf-8")
+
+        configuration_files = ConfigurationFiles()
+        configurations = Configurations(configuration_files)
+        badges_check = Badges(configuration_files, configurations)
+        result = badges_check.execute()
+
+        assert result.is_ok is False
+        assert "README.md is missing the following badges:" in result.message
+        assert "CodeQL badge" in result.message
+        assert "Code Coverage badge" in result.message
