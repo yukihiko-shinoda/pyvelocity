@@ -7,8 +7,8 @@ on:
     branches:
       - main
 permissions:
-  contents: read  # Advanced Security suggested in pull request review
-  packages: read  # Advanced Security suggested in pull request review
+  contents: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
+  packages: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
 jobs:
   call-workflow-test:
     uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-test.yml@main
