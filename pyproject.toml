@@ -55,7 +55,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name="pyvelocity"
-version="0.8.1"
+version="0.9.0"
 description = "Automates task to check configurations about Python project to follow best practices to increase development velocity."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -116,7 +116,7 @@ pyvelocity = "pyvelocity.cli:main"
 skips = ["tests/*"]
 
 [tool.bumpversion]
-current_version = "0.8.1"
+current_version = "0.9.0"
 commit = true
 tag = true
 
