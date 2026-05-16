@@ -91,6 +91,9 @@ def test_cli_success_path(successful_result: Result) -> None:
     successful_results = Results([successful_result])
 
     with (
+        # To prevent real checks from running;
+        # they trigger setuptools DEBUG logs that close Click's captured stdout via pytest's live log handler.
+        patch("pyvelocity.cli.Checks"),
         patch("pyvelocity.cli.Results", return_value=successful_results),
         patch("pyvelocity.cli.echo_success") as mock_echo_success,
     ):

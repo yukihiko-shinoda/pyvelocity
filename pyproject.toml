@@ -17,9 +17,13 @@ dev = [
   # - dlint/requirements.txt at 0.13.0 · dlint-py/dlint
   #   https://github.com/dlint-py/dlint/blob/0.13.0/requirements.txt#L1
   "dlint>=0.14.0",
-  # To the docformatter load pyproject.toml settings:
-  "docformatter[tomli]; python_version < '3.11'",
-  "docformatter; python_version >= '3.11'",
+  # We exclude docformatter versions before 1.7.8 because they depend on untokenize==0.1.1,
+  # whose setup.py uses ast.Constant.s that was removed in Python 3.14.
+  # docformatter 1.7.8 and later require Python 3.10 or later instead of untokenize.
+  # And, we specify as follows if the latest supported Python version is less than 3.11,
+  # so that docformatter can read the settings in pyproject.toml:
+  "docformatter[tomli]>=1.7.8; python_version < '3.11'",
+  "docformatter>=1.7.8; python_version >= '3.11'",
   "dodgy",
   # The hacking depends flake8 ~=6.1.0 or ~=5.0.1 or ~=4.0.1.
   # We should avoid the versions that is not compatible with the hacking,
@@ -29,28 +33,21 @@ dev = [
   # - Using Black with other tools - Black 25.1.0 documentation
   #   https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#bugbear
   "flake8-bugbear",
-  # To use flake8 --radon-show-closures
-  "flake8-polyfill",
   # To use pyproject.toml for Flake8 configuration
   "Flake8-pyproject",
   # Latest hacking depends on legacy version of flake8, and legacy hacking doesn't narrow flake8 version.
   # When unpin hacking, it has possibility to install too legacy version of hacking.
-  "hacking>=5.0.0; python_version >= '3.8'",
+  "hacking>=5.0.0",
   "invokelint>=0.8.1",
   "mypy",
   "pylint",
   "pytest",
   "pytest-resource-path",
-  # Since the radon can't run when use pytest log format:
-  # - Radon can't run when use pytest log fornat: `$()d` · Issue #251 · rubik/radon
-  #   https://github.com/rubik/radon/issues/251
-  "radon<6.0.0",
   "ruff",
-  "semgrep; python_version>='3.9' or platform_system=='Linux'",
+  "semgrep",
   # For setup.py
   "types-setuptools",
   "types-invoke",
-  "xenon",
 ]
 [build-system]
 requires = ["setuptools"]
@@ -61,7 +58,7 @@ name="pyvelocity"
 version="0.8.1"
 description = "Automates task to check configurations about Python project to follow best practices to increase development velocity."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
   "click>=7.0",
   "packagediscovery>=0.2.0",
@@ -95,11 +92,11 @@ classifiers=[
   "Topic :: System :: Software Distribution",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Typing :: Typed"
 ]
 
@@ -182,6 +179,12 @@ exclude = [
 [tool.mypy]
 strict = true
 
+[tool.pylint]
+disable = [
+    # We check line length by flake8-bugbear B950.
+    "line-too-long",
+]
+
 [tool.pylint.basic]
 docstring-min-length = "7"
 
@@ -195,14 +198,12 @@ max-line-length = 119
 min-public-methods = "1"
 
 [tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "DEBUG"
+log_format = "%(asctime)s %(process)d %(levelname)s %(name)s:%(filename)s:%(lineno)d %(message)s"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]
-
-[tool.radon]
-cc_min = "B"
-show_complexity = true
-show_mi = true
 
 [tool.ruff]
 line-length = 119
@@ -233,6 +234,11 @@ unfixable = [
 [tool.ruff.lint.isort]
 # To follow H301: Do not import more than one module per line (*) in Flake8 + openstack/hacking
 force-single-line = true
+
+[tool.ruff.lint.mccabe]
+# The default value: 10 is too loose,
+# 5 is as same as the default value of Radon for A rank that we use without any problems for a decade.
+max-complexity = 5
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]

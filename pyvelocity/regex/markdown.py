@@ -1,5 +1,10 @@
 """Markdown and general regex patterns for PyVelocity."""
 
+# Prevents docformatter from collapsing the two blank lines before the class
+# (it would reduce them to one, then ruff format would add one back every lint run).
+# - The docformatter removes blank line against PEP8 (conflicts with Ruff (Black)) · Issue #350 · PyCQA/docformatter
+#   https://github.com/PyCQA/docformatter/issues/350
+
 
 class RegexPatternsMarkDown:
     """Collection of reusable regex patterns used throughout the codebase."""

@@ -2,23 +2,18 @@
 
 from __future__ import annotations
 
-import sys
 from abc import ABC
 from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import ClassVar
 from typing import Generic
+from typing import TypeGuard
 from typing import TypeVar
 
 if TYPE_CHECKING:
     from pyvelocity.configurations.files import ConfigurationFile
     from pyvelocity.configurations.tools import Tool
-
-if sys.version_info >= (3, 10):
-    from typing import TypeGuard
-else:
-    from typing_extensions import TypeGuard  # pragma: no cover
 
 
 @dataclass
