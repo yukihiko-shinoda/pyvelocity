@@ -7,11 +7,11 @@ name="pyvelocity"
 version="0.1.0"
 description = "Checks code and settings and ls up advises in point of velocity."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.15"
 classifiers=[
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
 [tool.docformatter]

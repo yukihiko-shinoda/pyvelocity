@@ -33,7 +33,7 @@ class TestClassifiers:
             (
                 ["pyproject_classifier_mismatch_missing.toml", "setup_success.cfg"],
                 "Python version classifiers don't match requires-python '>=3.10': missing classifiers: "
-                "Programming Language :: Python :: 3.12, Programming Language :: Python :: 3.13",
+                "Programming Language :: Python :: 3.12, Programming Language :: Python :: 3.13, Programming Language :: Python :: 3.14",
                 False,
             ),
             (

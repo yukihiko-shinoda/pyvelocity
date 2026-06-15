@@ -33,11 +33,11 @@ class TestProjectVersionLogic:
         ("requires_python_value", "expected_versions"),
         [
             # Test version requirement parsing for Python 3.10 and above
-            (">=3.10", {"3.10", "3.11", "3.12", "3.13"}),
+            (">=3.10", {"3.10", "3.11", "3.12", "3.13", "3.14"}),
             # Test version range with upper bound
             (">=3.8,<3.12", {"3.8", "3.9", "3.10", "3.11"}),
             # Test minimum version requirement including older versions
-            (">=3.5", {"3.5", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"}),
+            (">=3.5", {"3.5", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"}),
             # Test compatible release operator
             ("~=3.11", {"3.11"}),
             # Test exact version specification
