@@ -41,7 +41,22 @@ dev = [
   "pytest",
   "pytest-resource-path",
   "ruff",
-  "semgrep",
+  # To prevent following error when running Semgrep due to legacy version of Semgrep
+  # Since the latest Semgrep depends on legacy version of clock:
+  #   File "/workspace/pyvelocity/.venv/lib/python3.14/site-packages/opentelemetry/proto/common/v1/common_pb2.py", line 5, in <module>
+  #     from google.protobuf import descriptor as _descriptor
+  #   File "/workspace/pyvelocity/.venv/lib/python3.14/site-packages/google/protobuf/descriptor.py", line 17, in <module>
+  #     from google.protobuf.internal import api_implementation
+  #   File "/workspace/pyvelocity/.venv/lib/python3.14/site-packages/google/protobuf/internal/api_implementation.py", line 51, in <module>
+  #     if _CanImport('google._upb._message'):
+  #        ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  #   File "/workspace/pyvelocity/.venv/lib/python3.14/site-packages/google/protobuf/internal/api_implementation.py", line 41, in _CanImport
+  #     mod = importlib.import_module(mod_name)
+  #   File "/root/.local/share/uv/python/cpython-3.14.5-linux-aarch64-gnu/lib/python3.14/importlib/__init__.py", line 88, in import_module
+  #     return _bootstrap._gcd_import(name[level:], package, level)
+  #            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  #   TypeError: Metaclasses with custom tp_new are not supported.
+  "semgrep>=1.122.0",
   # For setup.py
   "types-setuptools",
   "types-invoke",
