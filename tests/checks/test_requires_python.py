@@ -28,8 +28,8 @@ class TestRequiresPython:
             (
                 ["pyproject_python_old_requires.toml", "setup_success.cfg"],
                 (
-                    "requires-python should support Python 3.13, "
-                    'but found ">=3.14" in [project] section of pyproject.toml'
+                    "requires-python should support Python 3.14, "
+                    'but found ">=3.15" in [project] section of pyproject.toml'
                 ),
                 False,
             ),
@@ -70,17 +70,17 @@ class TestRequiresPythonVersionLogic:
     @pytest.mark.parametrize(
         ("requires_python_spec", "expected_supports_latest"),
         [
-            # Should support 3.13
+            # Should support 3.14
             (">=3.8", True),
-            (">=3.13", True),
+            (">=3.14", True),
             (">=3.8,<4.0", True),
-            ("~=3.13", True),
-            ("3.13", True),
-            # Should not support 3.13
-            (">=3.14", False),
-            (">=3.8,<3.13", False),
-            ("~=3.12", False),
-            ("3.12", False),
+            ("~=3.14", True),
+            ("3.14", True),
+            # Should not support 3.14
+            (">=3.15", False),
+            (">=3.8,<3.14", False),
+            ("~=3.13", False),
+            ("3.13", False),
             ("invalid", False),
         ],
     )
