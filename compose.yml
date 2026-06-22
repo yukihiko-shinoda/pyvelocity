@@ -1,5 +1,0 @@
-services:
-  pyvelocity:
-    build:
-      context: .
-    image: futureys/pyvelocity:latest
