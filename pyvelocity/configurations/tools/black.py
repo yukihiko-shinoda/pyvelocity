@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Implements Black configurations."""
 
 from __future__ import annotations

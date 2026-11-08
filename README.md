@@ -1,7 +1,7 @@
 # pyvelocity
 
 [![Test](https://github.com/yukihiko-shinoda/pyvelocity/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ATest)
-[![CodeQL](https://github.com/yukihiko-shinoda/pyvelocity/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions?query=workflow%3ACodeQL)
+[![CodeQL](https://github.com/yukihiko-shinoda/pyvelocity/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/yukihiko-shinoda/pyvelocity/actions/workflows/github-code-scanning/codeql)
 [![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity)
 [![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/pyvelocity)
 [![Dependabot](https://flat.badgen.net/github/dependabot/yukihiko-shinoda/pyvelocity?icon=dependabot)](https://github.com/yukihiko-shinoda/pyvelocity/security/dependabot)

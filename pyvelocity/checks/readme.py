@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Implements readme check."""
 
 from pyvelocity.checks import Check

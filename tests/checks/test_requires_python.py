@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for requires_python check."""
 
 import pytest

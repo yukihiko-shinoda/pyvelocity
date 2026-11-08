@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """GitHub-specific regex patterns for PyVelocity."""
 
 import re

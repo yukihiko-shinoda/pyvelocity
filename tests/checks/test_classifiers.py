@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for classifiers check."""
 
 import pytest
@@ -32,14 +34,18 @@ class TestClassifiers:
             ),
             (
                 ["pyproject_classifier_mismatch_missing.toml", "setup_success.cfg"],
-                "Python version classifiers don't match requires-python '>=3.10': missing classifiers: "
-                "Programming Language :: Python :: 3.12, Programming Language :: Python :: 3.13, Programming Language :: Python :: 3.14",
+                (
+                    "Python version classifiers don't match requires-python '>=3.10': missing classifiers: "
+                    "Programming Language :: Python :: 3.12, Programming Language :: Python :: 3.13, Programming Language :: Python :: 3.14"
+                ),
                 False,
             ),
             (
                 ["pyproject_classifier_mismatch_extra.toml", "setup_success.cfg"],
-                "Python version classifiers don't match requires-python '>=3.11': extra classifiers: "
-                "Programming Language :: Python :: 3.9, Programming Language :: Python :: 3.10",
+                (
+                    "Python version classifiers don't match requires-python '>=3.11': extra classifiers: "
+                    "Programming Language :: Python :: 3.9, Programming Language :: Python :: 3.10"
+                ),
                 False,
             ),
             (

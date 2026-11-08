@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Console script for pyvelocity."""
 
 import click
@@ -7,6 +9,12 @@ from pyvelocity.checks.aggregation import Checks
 from pyvelocity.checks.aggregation import Results
 from pyvelocity.configurations.aggregation import Configurations
 from pyvelocity.configurations.files.aggregation import ConfigurationFiles
+
+
+class ImprovementsFoundError(ClickException):
+    """Raised when some checks fail."""
+
+    exit_code = 3
 
 
 def echo_success() -> None:
@@ -32,7 +40,6 @@ def main() -> None:
     if results.message:
         click.echo(results.message)
     if not results.is_ok:
-        exception = ClickException("Looks there are some of improvements.")
-        exception.exit_code = 3
-        raise exception
+        msg = "Looks there are some of improvements."
+        raise ImprovementsFoundError(msg)
     echo_success()

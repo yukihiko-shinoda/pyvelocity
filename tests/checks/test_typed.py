@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for typed check."""
 
 from __future__ import annotations
@@ -38,8 +40,10 @@ class TestTyped:
                 ["pyproject_typed_missing_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-                'Missing "Typing :: Typed" classifier in pyproject.toml',
+                (
+                    'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                    'Missing "Typing :: Typed" classifier in pyproject.toml'
+                ),
                 False,
             ),
             # Wrong package-data config
@@ -47,8 +51,10 @@ class TestTyped:
                 ["pyproject_typed_wrong_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-                'Missing "Typing :: Typed" classifier in pyproject.toml',
+                (
+                    'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                    'Missing "Typing :: Typed" classifier in pyproject.toml'
+                ),
                 False,
             ),
             # Missing py.typed files
@@ -64,8 +70,10 @@ class TestTyped:
                 ["pyproject_typed_non_dict_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 ["testpackage/py.typed"],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-                'Missing "Typing :: Typed" classifier in pyproject.toml',
+                (
+                    'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                    'Missing "Typing :: Typed" classifier in pyproject.toml'
+                ),
                 False,
             ),
             # Missing typing classifier
@@ -81,9 +89,11 @@ class TestTyped:
                 ["pyproject_typed_missing_package_data.toml", "setup_success.cfg"],
                 ["testpackage"],
                 [],
-                'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
-                "Missing py.typed files in package directories\n"
-                'Missing "Typing :: Typed" classifier in pyproject.toml',
+                (
+                    'Missing tool.setuptools.package-data "*" = ["py.typed"] configuration\n'
+                    "Missing py.typed files in package directories\n"
+                    'Missing "Typing :: Typed" classifier in pyproject.toml'
+                ),
                 False,
             ),
         ],

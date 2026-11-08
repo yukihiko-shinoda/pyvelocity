@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Markdown and general regex patterns for PyVelocity."""
 
 # Prevents docformatter from collapsing the two blank lines before the class

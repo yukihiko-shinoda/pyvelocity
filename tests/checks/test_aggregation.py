@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for aggregation.py."""
 
 from pathlib import Path

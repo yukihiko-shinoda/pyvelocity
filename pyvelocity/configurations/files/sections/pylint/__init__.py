@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Implements sections for Pylint."""
 
 from __future__ import annotations
