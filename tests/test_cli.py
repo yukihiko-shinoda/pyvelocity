@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for `pyvelocity` package."""
 
 # Reason: Accept risk of using subprocess.
@@ -53,9 +55,11 @@ def test_echo_success_in_subprocess(temp_setup_py: Path) -> None:
         (
             ["pyproject_success.toml", "setup_success.cfg"],
             3,
-            "Legacy setup files found: setup.cfg. Use pyproject.toml instead.\n"
-            "README.md file not found\n"
-            "Error: Looks there are some of improvements.\n",
+            (
+                "Legacy setup files found: setup.cfg. Use pyproject.toml instead.\n"
+                "README.md file not found\n"
+                "Error: Looks there are some of improvements.\n"
+            ),
         ),
         (
             ["pyproject_error.toml", "setup_error.cfg"],
